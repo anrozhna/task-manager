@@ -1,5 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
+from django.views import generic
 
 from planner.models import Task
 
@@ -13,3 +15,8 @@ def index(request: HttpRequest) -> HttpResponse:
         return render(request, "planner/index.html", context=context)
     else:
         return redirect("login")
+
+
+class WorkerListView(generic.ListView):
+    model = get_user_model()
+    paginate_by = 10
