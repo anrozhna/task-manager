@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Welcome</h1>
+ {% if tasks %}
+   <h1>Your tasks</h1>
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Deadline</th>
+        <th>Is completed</th>
+        <th>Priority</th>
+        <th>Task Type</th>
+        <th>Assignees</th>
+      </tr>
+      {% for task in tasks %}
+        <tr>
+          <td>{{ task.id }}</td>
+          <td><a href="#">{{ task.name }}</a></td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.deadline }}</td>
+          <td>{{ task.is_completed }}</td>
+          <td>{{ task.priority }}</td>
+          <td>{{ task.task_type }}</td>
+          <td>
+            {% for assignee in task.assignees.all %}
+              <p>{{ assignee.first_name }} {{ assignee.last_name }}</p>
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+
+    </table>
+  {% else %}
+    <p>There are no tasks.</p>
+  {% endif %}
 {% endblock %}
