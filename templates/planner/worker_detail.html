@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ worker.first_name }} {{ worker.last_name }} detail</h1>
+  <hr>
+
+  <p><strong>First name:</strong> {{ worker.first_name }}</p>
+  <p><strong>Last name:</strong> {{ worker.last_name }}</p>
+  <p><strong>Position:</strong> {{ worker.position }}</p>
+  <p><strong>Is staff:</strong> {{ worker.is_staff }}</p>
+  <hr>
+
+  <div class="ml-3">
+    {% if worker.tasks.all %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Deadline</th>
+        <th>Is completed</th>
+        <th>Priority</th>
+        <th>Task Type</th>
+      </tr>
+      {% for task in worker.tasks.all %}
+        <tr>
+          <td>{{ task.id }}</td>
+          <td>
+            <a href="#">
+              {{ task.name }}
+              {% if user == worker %} (Me)
+              {% endif %}
+            </a>
+          </td>
+          <td>{{ task.deadline }}</td>
+          <td>{{ task.is_completed }}</td>
+          <td>{{ task.priority }}</td>
+          <td>{{ task.task_type }}</td>
+        </tr>
+      {% endfor %}
+
+    </table>
+  {% else %}
+    <p>There are no tasks.</p>
+  {% endif %}
+  </div>
+{% endblock %}

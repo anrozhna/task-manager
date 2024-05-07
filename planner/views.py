@@ -20,3 +20,8 @@ def index(request: HttpRequest) -> HttpResponse:
 class WorkerListView(generic.ListView):
     model = get_user_model()
     paginate_by = 10
+
+
+class WorkerDetailView(generic.DetailView):
+    model = get_user_model()
+    queryset = get_user_model().objects.select_related("position")
