@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
- {% if tasks %}
-   <h1>Your tasks</h1>
+  {% if task_list %}
+    <h1>Your tasks</h1>
     <table class="table">
       <tr>
         <th>ID</th>
@@ -14,21 +14,25 @@
         <th>Task Type</th>
         <th>Assignees</th>
       </tr>
-      {% for task in tasks %}
-        <tr>
-          <td>{{ task.id }}</td>
-          <td><a href="#">{{ task.name }}</a></td>
-          <td>{{ task.description }}</td>
-          <td>{{ task.deadline }}</td>
-          <td>{{ task.is_completed }}</td>
-          <td>{{ task.priority }}</td>
-          <td>{{ task.task_type }}</td>
-          <td>
-            {% for assignee in task.assignees.all %}
-              <p>{{ assignee.first_name }} {{ assignee.last_name }}</p>
-            {% endfor %}
-          </td>
-        </tr>
+      {% for task in task_list %}
+        {% if user in task.assignees.all %}
+          <tr>
+            <td>{{ task.id }}</td>
+            <td><a href="#">{{ task.name }}</a></td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.deadline }}</td>
+            <td>{{ task.is_completed }}</td>
+            <td>{{ task.priority }}</td>
+            <td>{{ task.task_type }}</td>
+            <td>
+              {% for assignee in task.assignees.all %}
+                <p>
+                  {{ assignee.first_name }} {{ assignee.last_name }} {% if assignee == user %} (Me){% endif %}
+                </p>
+              {% endfor %}
+            </td>
+          </tr>
+        {% endif %}
       {% endfor %}
 
     </table>
