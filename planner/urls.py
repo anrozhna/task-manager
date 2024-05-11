@@ -1,7 +1,7 @@
 from django.urls import path
 
 from planner.views import (
-    index,
+    IndexView,
     WorkerListView,
     WorkerDetailView
 )
@@ -9,7 +9,7 @@ from planner.views import (
 app_name = "planner"
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
 
     path(
         "workers/",
