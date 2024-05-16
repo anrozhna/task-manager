@@ -2,14 +2,16 @@ from django.urls import path
 
 from planner.views import (
     IndexView,
+    register,
     WorkerListView,
-    WorkerDetailView
+    WorkerDetailView,
 )
 
 app_name = "planner"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
+    path("register/", register, name='register'),
 
     path(
         "workers/",
@@ -21,4 +23,5 @@ urlpatterns = [
         WorkerDetailView.as_view(),
         name="worker-detail",
     ),
+
 ]

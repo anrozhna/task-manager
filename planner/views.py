@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
+from planner.forms import (
+    UserRegistrationForm
+)
 from planner.models import Task
 
 
@@ -23,3 +25,24 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = get_user_model().objects.select_related("position")
+
+
+def register(request):
+    if request.method == "POST":
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data["password1"])
+            new_user.save()
+            return render(
+                request,
+                "registration/register_done.html",
+                {"new_user": new_user}
+            )
+    else:
+        user_form = UserRegistrationForm()
+    return render(
+        request,
+        "registration/register.html",
+        {"form": user_form}
+    )
