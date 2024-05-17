@@ -34,7 +34,13 @@
 
         </td>
         <td>
-          <span class="fw-normal">{{ worker.position }}</span>
+          <span class="fw-normal">
+            {% if worker.position %}
+              {{ worker.position.name }}
+            {% else %}
+              Unemployed
+            {% endif %}
+          </span>
         </td>
         <td>
           {% if worker.is_staff %}
