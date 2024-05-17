@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from planner.forms import (
+    WorkerCreationForm,
     UserRegistrationForm
 )
 from planner.models import Task
@@ -25,6 +26,12 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = get_user_model().objects.select_related("position")
+
+
+class WorkerCreateView(generic.edit.CreateView):
+    model = get_user_model()
+    form_class = WorkerCreationForm
+    success_url = reverse_lazy("planner:index")
 
 
 def register(request):
