@@ -17,6 +17,21 @@ class WorkerCreationForm(UserCreationForm):
         )
 
 
+class WorkerUpdateForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = UserCreationForm.Meta.fields + (
+            "first_name",
+            "last_name",
+            "email",
+            "position",
+        )
+        position = forms.CharField(
+            required=False,
+        )
+
+
+
 class UserRegistrationForm(forms.ModelForm):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Repeat password", widget=forms.PasswordInput)

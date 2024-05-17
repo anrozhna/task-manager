@@ -6,6 +6,7 @@ from django.views import generic
 
 from planner.forms import (
     WorkerCreationForm,
+    WorkerUpdateForm,
     UserRegistrationForm
 )
 from planner.models import Task
@@ -13,7 +14,7 @@ from planner.models import Task
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     model = Task
-    template_name = "planner/index.html"
+    template_name = "planner/worker_list.html"
     paginate_by = 5
     queryset = Task.objects.prefetch_related("assignees")
 
@@ -32,6 +33,13 @@ class WorkerCreateView(generic.edit.CreateView):
     model = get_user_model()
     form_class = WorkerCreationForm
     success_url = reverse_lazy("planner:index")
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+    model = get_user_model()
+    form_class = WorkerUpdateForm
+    template_name = "planner/worker_form.html"
+    success_url = reverse_lazy("planner:worker-list")
 
 
 def register(request):
