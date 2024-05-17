@@ -21,7 +21,7 @@ class Task(models.Model):
         ("low", "Low"),
         ("medium", "Medium"),
         ("high", "High"),
-        ("top", "Top"),
+        ("urgent", "Urgent"),
     )
 
     name = models.CharField(max_length=255, unique=True)
@@ -42,6 +42,7 @@ class Worker(AbstractUser):
     position = models.ForeignKey(
         Position,
         related_name="workers",
+        blank=True,
         null=True,
         on_delete=models.SET_NULL,
     )
