@@ -63,6 +63,12 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("planner:worker-list")
 
 
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    paginate_by = 5
+    queryset = Task.objects.prefetch_related("assignees")
+
+
 def register(request):
     if request.method == "POST":
         user_form = UserRegistrationForm(request.POST)
