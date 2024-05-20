@@ -5,7 +5,7 @@ from planner.views import (
     register,
     WorkerListView,
     WorkerDetailView,
-    WorkerCreateView, WorkerUpdateView,
+    WorkerCreateView, WorkerUpdateView, WorkerDeleteView,
 )
 
 app_name = "planner"
@@ -34,5 +34,10 @@ urlpatterns = [
         WorkerUpdateView.as_view(),
         name="worker-update",
     ),
+    path(
+        "workers/<int:pk>/delete/",
+        WorkerDeleteView.as_view(),
+        name="worker-delete",
+    )
 
 ]

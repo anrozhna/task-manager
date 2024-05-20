@@ -45,16 +45,21 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = get_user_model().objects.select_related("position")
 
 
-class WorkerCreateView(generic.edit.CreateView):
+class WorkerCreateView(generic.CreateView):
     model = get_user_model()
     form_class = WorkerCreationForm
-    success_url = reverse_lazy("planner:index")
+    success_url = reverse_lazy("planner:worker-list")
 
 
-class WorkerUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = get_user_model()
     form_class = WorkerUpdateForm
     template_name = "planner/worker_form.html"
+    success_url = reverse_lazy("planner:worker-list")
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = get_user_model()
     success_url = reverse_lazy("planner:worker-list")
 
 
