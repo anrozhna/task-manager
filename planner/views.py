@@ -103,6 +103,12 @@ class PositionDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Position.objects.prefetch_related("workers")
 
 
+class PositionCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Position
+    fields = "__all__"
+    success_url = reverse_lazy("planner:position-list")
+
+
 @login_required
 def change_task_is_completed(request, task_id):
     if request.method == "POST":
