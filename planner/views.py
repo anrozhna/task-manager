@@ -94,7 +94,8 @@ def change_task_is_completed(request, task_id):
         task = get_object_or_404(Task, pk=task_id)
         task.is_completed = not task.is_completed
         task.save()
-        return redirect("planner:task-list")
+        page_number = request.POST.get("page", 1)
+        return redirect(f"{reverse("planner:task-list")}?page={page_number}")
     else:
         return HttpResponseNotAllowed(["POST"])
 
