@@ -13,7 +13,7 @@
           <div class="swal2-icon-content">!</div>
         </div>
         <img class="swal2-image" style="display: none;">
-        <h2 class="swal2-title" id="swal2-title" style="display: block;">Are you sure to delete {{ worker.first_name }} {{ worker.last_name }}?</h2>
+        <h2 class="swal2-title" id="swal2-title" style="display: block;">Are you sure to delete {{ task.name }}?</h2>
         <div class="swal2-html-container" style="display: block;">You won't be able to revert this!</div>
         <input class="swal2-input" style="display: none;">
         <input type="file" class="swal2-file" style="display: none;">
@@ -33,7 +33,7 @@
           <input type="submit" value="Yes, delete it!" class="swal2-cancel swal2-styled swal2-default-outline" aria-label=""
                   style="display: inline-block; background-color: rgb(221, 51, 51);">
           <button type="button" class="swal2-deny swal2-styled" aria-label="" style="display: none;">No</button>
-          <a href="{% url 'planner:worker-list' %}" class="swal2-cancel swal2-styled swal2-default-outline" aria-label=""
+          <a href="{% url 'planner:task-list' %}" class="swal2-cancel swal2-styled swal2-default-outline" aria-label=""
                   style="display: inline-block; background-color: rgb(48, 133, 214);">
             Cancel
           </a>

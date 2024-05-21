@@ -88,6 +88,11 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy("planner:task-list")
 
 
+class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("planner:task-list")
+
+
 @login_required
 def change_task_is_completed(request, task_id):
     if request.method == "POST":
