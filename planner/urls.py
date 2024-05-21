@@ -7,6 +7,7 @@ from planner.views import (
     WorkerDetailView,
     WorkerCreateView, WorkerUpdateView, WorkerDeleteView, TaskListView, TaskDetailView, change_task_is_completed,
     TaskCreateView, TaskUpdateView, TaskDeleteView, PositionListView, PositionDetailView, PositionCreateView,
+    PositionUpdateView,
 )
 
 app_name = "planner"
@@ -85,6 +86,11 @@ urlpatterns = [
         "positions/create/",
         PositionCreateView.as_view(),
         name="position-create",
+    ),
+    path(
+        "positions/<int:pk>/update/",
+        PositionUpdateView.as_view(),
+        name="position-update",
     )
 
 ]

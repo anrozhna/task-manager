@@ -109,6 +109,13 @@ class PositionCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("planner:position-list")
 
 
+class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Position
+    fields = "__all__"
+    template_name = "planner/position_form.html"
+    success_url = reverse_lazy("planner:position-list")
+
+
 @login_required
 def change_task_is_completed(request, task_id):
     if request.method == "POST":
