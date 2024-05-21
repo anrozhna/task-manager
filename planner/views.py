@@ -9,7 +9,7 @@ from django.views import generic
 from planner.forms import (
     WorkerCreationForm,
     WorkerUpdateForm,
-    UserRegistrationForm, TaskCreationForm
+    UserRegistrationForm, TaskCreationForm, TaskUpdateForm
 )
 from planner.models import Task, Position
 
@@ -78,6 +78,13 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskCreationForm
+    success_url = reverse_lazy("planner:task-list")
+
+
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Task
+    form_class = TaskUpdateForm
+    template_name = "planner/task_form.html"
     success_url = reverse_lazy("planner:task-list")
 
 

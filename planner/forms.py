@@ -109,3 +109,7 @@ class TaskCreationForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = "__all__"
+
+
+class TaskUpdateForm(TaskCreationForm):
+    pass
