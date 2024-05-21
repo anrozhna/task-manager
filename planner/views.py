@@ -11,7 +11,7 @@ from planner.forms import (
     WorkerUpdateForm,
     UserRegistrationForm, TaskCreationForm, TaskUpdateForm
 )
-from planner.models import Task, Position
+from planner.models import Task, Position, TaskType
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -119,6 +119,14 @@ class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
 class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Position
     success_url = reverse_lazy("planner:position-list")
+
+
+class TaskTypeListView(LoginRequiredMixin, generic.ListView):
+    model = TaskType
+    paginate_by = 9
+    template_name = "planner/task_type_list.html"
+    context_object_name = "task_type_list"
+
 
 
 @login_required
