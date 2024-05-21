@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
+from planner.models import Task, TaskType
+
 
 class WorkerCreationForm(UserCreationForm):
     class Meta:
@@ -31,7 +33,6 @@ class WorkerUpdateForm(forms.ModelForm):
         )
 
 
-
 class UserRegistrationForm(forms.ModelForm):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Repeat password", widget=forms.PasswordInput)
@@ -51,3 +52,60 @@ class UserRegistrationForm(forms.ModelForm):
         if cd["password1"] != cd["password2"]:
             raise forms.ValidationError("Passwords don't match.")
         return cd["password2"]
+
+
+class TaskCreationForm(forms.ModelForm):
+    PRIORITY_CHOICES = (
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ("urgent", "Urgent"),
+    )
+    name = forms.CharField(
+        label="Name",
+        widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
+    )
+    description = forms.CharField(
+        label="Description",
+        widget=forms.Textarea(
+            attrs={
+                "placeholder": "Enter task description",
+                "rows": 5,
+            }
+        )
+    )
+
+    deadline = forms.DateTimeField(
+        label="Deadline",
+        widget=forms.DateTimeInput(
+            format="%Y-%m-%dT%H:%M",
+            attrs={"type": "datetime-local"}
+        )
+    )
+
+    priority = forms.ChoiceField(
+        required=True,
+        choices=PRIORITY_CHOICES,
+        widget=forms.Select(
+            attrs={"class": "form-select"},
+        ),
+    )
+
+    task_type = forms.ModelChoiceField(
+        queryset=TaskType.objects.all(),
+        widget=forms.Select(
+            attrs={"class": "form-select"},
+        ),
+        label=""
+    )
+
+    assignees = forms.ModelMultipleChoiceField(
+        queryset=get_user_model().objects.all(),
+        label="Assignees",
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
+    )
+
+    class Meta:
+        model = Task
+        fields = "__all__"
