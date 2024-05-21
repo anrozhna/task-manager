@@ -6,7 +6,7 @@ from planner.views import (
     WorkerListView,
     WorkerDetailView,
     WorkerCreateView, WorkerUpdateView, WorkerDeleteView, TaskListView, TaskDetailView, change_task_is_completed,
-    TaskCreateView, TaskUpdateView, TaskDeleteView,
+    TaskCreateView, TaskUpdateView, TaskDeleteView, PositionListView,
 )
 
 app_name = "planner"
@@ -70,6 +70,11 @@ urlpatterns = [
         "tasks/<int:pk>/delete/",
         TaskDeleteView.as_view(),
         name="task-delete",
-    )
+    ),
+    path(
+        "positions/",
+        PositionListView.as_view(),
+        name="position-list",
+    ),
 
 ]
