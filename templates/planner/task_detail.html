@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1 class="d-flex justify-content-center display-2">{{ task.name}}</h1>
+  <h1 class="d-flex justify-content-center display-2">{{ task.name }}</h1>
   <br>
 
   <p class="text-uppercase text-muted h4">Description: 
-    <span class="fw-bold h5">{{ task.description }}</span>
+    <span class="fw-bold">{{ task.description }}</span>
   </p>
   <p class="text-uppercase text-muted h4">Deadline: 
-    <span class="fw-bold h5">{{ task.deadline }}</span>
+    <span class="fw-bold">{{ task.deadline }}</span>
   </p>
   <p class="text-uppercase text-muted h4">Is completed: 
     {% if task.is_completed %}
@@ -29,13 +29,13 @@
   </p>
   <p class="text-uppercase text-muted h4">Priority: 
     {% if task.priority == "low" or task.priority == "medium" or task.priority == "Low" or task.priority == "Medium" %}
-      <span class="fw-bold h5 text-success">{{ task.priority }}</span>
+      <span class="fw-bold text-success">{{ task.priority }}</span>
     {% else %}
-      <span class="fw-bold h5 text-danger">{{ task.priority }}</span>
+      <span class="fw-bold text-danger">{{ task.priority }}</span>
     {% endif %}
   </p>
   <p class="text-uppercase text-muted h4">Task type: 
-    <span class="fw-bold h5">{{ task.task_type }}</span>
+    <span class="fw-bold">{{ task.task_type }}</span>
   </p>
   
 <hr>
@@ -166,6 +166,9 @@
         </tbody>
       </table>
     </div>
-    {% endif %}
+  {% else %}
+    <br>
+    <span class="h6 fw-bold d-flex justify-content-center">There are no assignees.</span>
+  {% endif %}
 
 {% endblock %}

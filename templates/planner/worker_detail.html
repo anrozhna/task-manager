@@ -3,86 +3,76 @@
 {% block content %}
   <h1 class="d-flex justify-content-center display-2">{{ worker.first_name }} {{ worker.last_name }}</h1>
   <br>
-  <div class="card card-body shadow border-0 table-wrapper table-responsive pb-4">
-    <table class="table user-table align-items-center">
-      <thead>
-      <tr>
+  
+  <p class="text-uppercase text-muted h4">Username: 
+    <span class="fw-bold">{{ worker.username }}</span>
+  </p>
+  <p class="text-uppercase text-muted h4">Position: 
+    <span class="fw-bold">
+      {% if worker.position %}
+        {{ worker.position.name }}
+      {% else %}
+        Unemployed
+      {% endif %}
+    </span>
+  </p>
+  <p class="text-uppercase text-muted h4">Is staff: 
+    {% if worker.is_staff %}
+      <span class="fw-normal text-success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
+        <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+      </svg>
 
-        <th class="border-bottom">Username</th>
-        <th class="border-bottom">Full name</th>
-        <th class="border-bottom">Position</th>
-        <th class="border-bottom">Is staff</th>
-        <th class="border-bottom">Is superuser</th>
-        <th class="border-bottom">Opened Tasks</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>
+      </span>
+    {% else %}
+      <span class="fw-normal text-danger">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
+        <path fill-rule="evenodd" d="m6.72 5.66 11.62 11.62A8.25 8.25 0 0 0 6.72 5.66Zm10.56 12.68L5.66 6.72a8.25 8.25 0 0 0 11.62 11.62ZM5.105 5.106c3.807-3.808 9.98-3.808 13.788 0 3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788Z" clip-rule="evenodd"></path>
+      </svg>
 
-            <div class="d-block">
-              <span class="fw-bold">{{ worker.username }}</span>
-            </div>
+      </span>
+    {% endif %}
+  </p>
+  <p class="text-uppercase text-muted h4">Is superuser: 
+    {% if worker.is_superuser %}
+      <span class="fw-bold text-success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
+        <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+      </svg>
 
-        </td>
-        <td>
+      </span>
+    {% else %}
+      <span class="fw-bold text-danger">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
+        <path fill-rule="evenodd" d="m6.72 5.66 11.62 11.62A8.25 8.25 0 0 0 6.72 5.66Zm10.56 12.68L5.66 6.72a8.25 8.25 0 0 0 11.62 11.62ZM5.105 5.106c3.807-3.808 9.98-3.808 13.788 0 3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788Z" clip-rule="evenodd"></path>
+      </svg>
 
-            <div class="d-block">
-              <span class="fw-bold">{{ worker.first_name }} {{ worker.last_name }}</span>
-              <div class="small text-gray">{{ worker.email }}</div>
-            </div>
-
-        </td>
-        <td>
-          <span class="fw-normal">
-            {% if worker.position %}
-              {{ worker.position.name }}
-            {% else %}
-              Unemployed
-            {% endif %}
-          </span>
-        </td>
-        <td>
-          {% if worker.is_staff %}
-            <span class="fw-normal text-success">{{ worker.is_staff }}</span>
-          {% else %}
-            <span class="fw-normal text-danger">{{ worker.is_staff }}</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if worker.is_superuser %}
-            <span class="fw-normal text-success">{{ worker.is_superuser }}</span>
-          {% else %}
-            <span class="fw-normal text-danger">{{ worker.is_superuser }}</span>
-          {% endif %}
-        </td>
-        <td>
-          <span class="fw-normal d-flex align-items-center">
-            {% if not worker.tasks.count %}
-            <svg class="icon icon-xxs text-success me-2" fill="currentColor" viewBox="0 0 20 20"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd">
-              </path>
-            {% else %}
-              <svg class="icon icon-xxs text-purple me-2" fill="currentColor" viewBox="0 0 20 20"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
-                      clip-rule="evenodd">
-                </path>
-            {% endif %}
-              
-            </svg> 
-            {{ worker.tasks.count }} task{{ worker.tasks.count|pluralize }}
-          </span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-
+      </span>
+    {% endif %}
+  </p>
+  <p class="text-uppercase text-muted h4">Tasks: 
+  <span class="fw-bold">{{ worker.tasks.count }} task{{ worker.tasks.count|pluralize }}
+  </span>
+    {% if not worker.tasks.count %}
+        <svg class="icon text-success me-2" fill="currentColor" viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+          <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd">
+          </path>
+        </svg>
+      {% else %}
+        <svg class="icon text-purple me-2" fill="currentColor" viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
+                clip-rule="evenodd">
+          </path>
+        </svg> 
+      {% endif %}
+    
+  </p>
+  <hr>
   {% if worker.tasks.all %}
     <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
@@ -140,6 +130,14 @@
                     <div class="ms-sm-3"><span class="badge super-badge bg-purple">Waiting</span></div>
                   {% else %}
                     <div class="ms-sm-3"><span class="badge super-badge bg-warning">In Progress</span></div>
+                  {% endif %}
+                
+                  {% if task.priority == "urgent" or task.priority == "Urgent" or task.priority == "high" or task.priority == "High" %}
+                    <div class="ms-sm-3"><span class="badge super-badge bg-danger">{{ task.priority }}</span></div>
+                  {% elif task.priority == "medium" or task.priority == "Medium" %}
+                    <div class="ms-sm-3"><span class="badge super-badge bg-purple">{{ task.priority }}</span></div>
+                  {% else %}
+                    <div class="ms-sm-3"><span class="badge super-badge bg-success">{{ task.priority }}</span></div>
                   {% endif %}
                 </div>
               </div>
