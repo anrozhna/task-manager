@@ -98,6 +98,11 @@ class PositionListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 9
 
 
+class PositionDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Position
+    queryset = Position.objects.prefetch_related("workers")
+
+
 @login_required
 def change_task_is_completed(request, task_id):
     if request.method == "POST":
