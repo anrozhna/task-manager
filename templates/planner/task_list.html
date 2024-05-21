@@ -42,7 +42,8 @@
             {#                    class="form-check-label" for="mailCheck11"></label></div>#}
             {#              </div>#}
             <div class="col-11 col-lg-8 px-0 mb-4 mb-md-0">
-              <div class="mb-2"><h3 class="h5"><a href="#">{{ task.name }}</a></h3>
+              <div class="mb-2"><h3 class="h5"><a href="{% url 'planner:task-detail' pk=task.pk %}">{{ task.name }}</a>
+              </h3>
                 <div class="d-block d-sm-flex">
                   <div>
                     <h4 class="h6 fw-normal text-gray d-flex align-items-center mb-3 mb-sm-0">
@@ -62,6 +63,14 @@
                   {% else %}
                     <div class="ms-sm-3"><span class="badge super-badge bg-warning">In Progress</span></div>
                   {% endif %}
+
+                  {% if task.priority == "urgent" or task.priority == "Urgent" or task.priority == "high" or task.priority == "High" %}
+                    <div class="ms-sm-3"><span class="badge super-badge bg-danger">{{ task.priority }}</span></div>
+                  {% elif task.priority == "medium" or task.priority == "Medium" %}
+                    <div class="ms-sm-3"><span class="badge super-badge bg-purple">{{ task.priority }}</span></div>
+                  {% else %}
+                    <div class="ms-sm-3"><span class="badge super-badge bg-success">{{ task.priority }}</span></div>
+                  {% endif %}
                 </div>
               </div>
               <div><a href="#" class="fw-bold text-dark"> <span
@@ -71,8 +80,30 @@
             <div
                 class="col-10 col-sm-2 col-lg-2 col-xl-2 d-none d-lg-block d-xl-inline-flex align-items-center ms-lg-auto text-right justify-content-end px-md-0">
 
+              <form method="post" action="{% url 'planner:task-done' task_id=task.id %}">
+                {% csrf_token %}
+                {% if not task.is_completed %}
+                <button type="submit" class="btn d-flex align-items-center m-lg-1 p-0" title="Mark as Done">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                       class="icon icon-xs text-gray-400">
+                    <path fill-rule="evenodd"
+                          d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                          clip-rule="evenodd"></path>
+                  </svg>
+                </button>
+                {% else %}
+                  <button type="submit" class="btn d-flex align-items-center m-lg-1 p-0" title="Mark as In Progres">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                         class="icon icon-xs text-success">
+                      <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                {% endif %}
+              </form>
 
-              <a class="d-flex align-items-center m-lg-1" href="#">
+              <a class="d-flex align-items-center m-lg-1" href="#" title="Update">
                 <svg class="icon icon-xs text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                      xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
@@ -83,16 +114,7 @@
                 </svg>
               </a>
 
-              <a class="d-flex align-items-center m-lg-1" href="#">
-                <svg class="icon icon-xs text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                     xmlns="http://www.w3.org/2000/svg">
-                  <path
-                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-              </a>
-
-              <a class="d-flex align-items-center m-lg-1" href="#">
+              <a class="d-flex align-items-center m-lg-1" href="#" title="Delete">
                 <svg class="icon icon-xs text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                      xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd"

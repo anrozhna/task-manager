@@ -5,7 +5,7 @@ from planner.views import (
     register,
     WorkerListView,
     WorkerDetailView,
-    WorkerCreateView, WorkerUpdateView, WorkerDeleteView, TaskListView,
+    WorkerCreateView, WorkerUpdateView, WorkerDeleteView, TaskListView, TaskDetailView, change_task_is_completed,
 )
 
 app_name = "planner"
@@ -45,5 +45,15 @@ urlpatterns = [
         TaskListView.as_view(),
         name="task-list",
     ),
+    path(
+        "tasks/<int:pk>/",
+        TaskDetailView.as_view(),
+        name="task-detail",
+    ),
+    path(
+        "tasks/<int:task_id>/done/",
+        change_task_is_completed,
+        name="task-done",
+    )
 
 ]

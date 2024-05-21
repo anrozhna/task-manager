@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponseNotAllowed
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from planner.forms import (
@@ -66,7 +68,22 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     paginate_by = 5
+
+
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
     queryset = Task.objects.prefetch_related("assignees")
+
+
+@login_required
+def change_task_is_completed(request, task_id):
+    if request.method == "POST":
+        task = get_object_or_404(Task, pk=task_id)
+        task.is_completed = not task.is_completed
+        task.save()
+        return redirect("planner:task-list")
+    else:
+        return HttpResponseNotAllowed(["POST"])
 
 
 def register(request):
