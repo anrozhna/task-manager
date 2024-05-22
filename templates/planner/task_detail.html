@@ -1,7 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1 class="d-flex justify-content-center display-2">{{ task.name }}</h1>
+  <div class="d-flex justify-content-between align-items-center py-4">
+    <div class="flex-grow-1 text-center">
+      <h1 class="display-2">{{ task.name }}</h1>
+    </div>
+    
+    <div class="d-flex">
+      <div class="me-2">
+        <a href="{% url 'planner:task-update' pk=task.pk %}"
+           class="btn btn-outline-info d-inline-flex align-items-center" 
+           title="Update">
+          Update
+        </a>
+      </div>
+      <div>
+        <a href="{% url 'planner:task-delete' pk=task.pk %}"
+           class="btn btn-outline-danger d-inline-flex align-items-center"
+           title="Delete">
+          Delete
+        </a>
+      </div>
+    </div>
+  </div>
   <br>
 
   <p class="text-uppercase text-muted h4">Description: 
