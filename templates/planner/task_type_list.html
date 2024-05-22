@@ -39,7 +39,7 @@
                   {{ task_type.name }}
                 </a>
                 <div class="d-flex align-items-center m-lg-2">
-                  <a class="d-flex" href="" title="Update">
+                  <a class="d-flex" href="{% url 'planner:task-type-update' pk=task_type.pk %}" title="Update">
                     <svg class="icon icon-xs text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                          xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
