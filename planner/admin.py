@@ -30,7 +30,7 @@ class WorkerAdmin(UserAdmin):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    search_fields = ("name", )
+    search_fields = ("name",)
     list_display = (
         "name",
         "deadline",
@@ -42,11 +42,11 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(TaskType)
 class TaskTypeAdmin(admin.ModelAdmin):
-    search_fields = ("name", )
-    list_display = ("name", )
+    search_fields = ("name",)
+    list_display = ("name",)
 
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
-    search_fields = ("name", )
-    list_display = ("name", )
+    search_fields = ("name",)
+    list_display = ("name",)

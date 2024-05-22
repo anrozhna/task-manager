@@ -9,7 +9,9 @@ from django.views import generic
 from planner.forms import (
     WorkerCreationForm,
     WorkerUpdateForm,
-    UserRegistrationForm, TaskCreationForm, TaskUpdateForm
+    UserRegistrationForm,
+    TaskCreationForm,
+    TaskUpdateForm,
 )
 from planner.models import Task, Position, TaskType
 
@@ -178,14 +180,8 @@ def register(request):
             new_user.set_password(user_form.cleaned_data["password1"])
             new_user.save()
             return render(
-                request,
-                "registration/register_done.html",
-                {"new_user": new_user}
+                request, "registration/register_done.html", {"new_user": new_user}
             )
     else:
         user_form = UserRegistrationForm()
-    return render(
-        request,
-        "registration/register.html",
-        {"form": user_form}
-    )
+    return render(request, "registration/register.html", {"form": user_form})

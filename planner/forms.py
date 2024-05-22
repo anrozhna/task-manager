@@ -62,8 +62,7 @@ class TaskCreationForm(forms.ModelForm):
         ("urgent", "Urgent"),
     )
     name = forms.CharField(
-        label="Name",
-        widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
+        label="Name", widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
     )
     description = forms.CharField(
         label="Description",
@@ -72,15 +71,14 @@ class TaskCreationForm(forms.ModelForm):
                 "placeholder": "Enter task description",
                 "rows": 5,
             }
-        )
+        ),
     )
 
     deadline = forms.DateTimeField(
         label="Deadline",
         widget=forms.DateTimeInput(
-            format="%Y-%m-%dT%H:%M",
-            attrs={"type": "datetime-local"}
-        )
+            format="%Y-%m-%dT%H:%M", attrs={"type": "datetime-local"}
+        ),
     )
 
     priority = forms.ChoiceField(
@@ -96,14 +94,14 @@ class TaskCreationForm(forms.ModelForm):
         widget=forms.Select(
             attrs={"class": "form-select"},
         ),
-        label=""
+        label="",
     )
 
     assignees = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         label="Assignees",
         widget=forms.CheckboxSelectMultiple(),
-        required=False
+        required=False,
     )
 
     class Meta:

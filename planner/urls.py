@@ -2,7 +2,6 @@ from django.urls import path
 
 from planner.views import (
     IndexView,
-    register,
     WorkerListView,
     WorkerDetailView,
     WorkerCreateView,
@@ -10,7 +9,6 @@ from planner.views import (
     WorkerDeleteView,
     TaskListView,
     TaskDetailView,
-    change_task_is_completed,
     TaskCreateView,
     TaskUpdateView,
     TaskDeleteView,
@@ -21,15 +19,18 @@ from planner.views import (
     PositionDeleteView,
     TaskTypeListView,
     TaskTypeDetailView,
-    TaskTypeCreateView, TaskTypeUpdateView, TaskTypeDeleteView,
+    TaskTypeCreateView,
+    TaskTypeUpdateView,
+    TaskTypeDeleteView,
+    register,
+    change_task_is_completed,
 )
 
 app_name = "planner"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
-    path("register/", register, name='register'),
-
+    path("register/", register, name="register"),
     path(
         "workers/",
         WorkerListView.as_view(),
@@ -55,7 +56,6 @@ urlpatterns = [
         WorkerDeleteView.as_view(),
         name="worker-delete",
     ),
-
     path(
         "tasks/",
         TaskListView.as_view(),
@@ -135,6 +135,5 @@ urlpatterns = [
         "task-types/<int:pk>/delete/",
         TaskTypeDeleteView.as_view(),
         name="task-type-delete",
-    )
-
+    ),
 ]
