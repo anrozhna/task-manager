@@ -8,7 +8,7 @@
         </path>
       </svg>
 
-      <span class="fw-bold">{{ worker.username }}</span>
+      <span class="fw-bold">{{ worker.username }}{% if user.id == worker.id %} (Me){% endif %}</span>
     </a>
 
   </td>
