@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="d-flex justify-content-center display-2">
+    {{ task_type.name }} task{{ task_type.tasks.all|pluralize }}
+  </h1>
+  <br>
+  {% if task_type.tasks %}
+    {% for task in task_type.tasks.all %}
+      {% include "includes/task_list.html" %}
+    {% endfor %}
+  {% else %}
+    <span class="h6 fw-bold d-flex justify-content-center">There are no task types.</span>
+  {% endif %}
+{% endblock %}

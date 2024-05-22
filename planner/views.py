@@ -128,6 +128,12 @@ class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "task_type_list"
 
 
+class TaskTypeDetailView(LoginRequiredMixin, generic.DetailView):
+    model = TaskType
+    queryset = TaskType.objects.prefetch_related("tasks")
+    template_name = "planner/task_type_detail.html"
+    context_object_name = "task_type"
+
 
 @login_required
 def change_task_is_completed(request, task_id):

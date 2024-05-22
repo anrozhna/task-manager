@@ -35,7 +35,9 @@
             <div class="card-body p-4">
 
               <h5 class="d-flex justify-content-between align-items-center">
-                <a href="" class="d-block">{{ task_type.name }}</a>
+                <a href="{% url 'planner:task-type-detail' pk=task_type.pk %}" class="d-block">
+                  {{ task_type.name }}
+                </a>
                 <div class="d-flex align-items-center m-lg-2">
                   <a class="d-flex" href="" title="Update">
                     <svg class="icon icon-xs text-gray-400" fill="currentColor" viewBox="0 0 20 20"
