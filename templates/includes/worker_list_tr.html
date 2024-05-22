@@ -8,14 +8,17 @@
         </path>
       </svg>
 
-      <span class="fw-bold">{{ worker.username }}{% if user.id == worker.id %} (Me){% endif %}</span>
+      <span class="fw-bold">{{ worker.username }}</span>
     </a>
 
   </td>
   <td>
 
     <a href="{% url 'planner:worker-detail' pk=worker.pk %}" class="d-block">
-      <span class="fw-bold">{{ worker.first_name }} {{ worker.last_name }}</span>
+      <span class="fw-bold">
+        {{ worker.first_name }} {{ worker.last_name }}
+        {% if user.id == worker.id %}<span class="text-success"> (Me)</span>{% endif %}
+      </span>
       <div class="small text-gray">{{ worker.email }}</div>
     </a>
 

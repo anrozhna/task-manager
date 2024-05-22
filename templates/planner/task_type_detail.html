@@ -5,11 +5,11 @@
     <div class="flex-grow-1 text-center">
       <h1 class="display-2">{{ task_type.name }} task{{ task_type.tasks.all|pluralize }}</h1>
     </div>
-    
+
     <div class="d-flex">
       <div class="me-2">
         <a href="{% url 'planner:task-type-update' pk=task_type.pk %}"
-           class="btn btn-outline-info d-inline-flex align-items-center" 
+           class="btn btn-outline-info d-inline-flex align-items-center"
            title="Update">
           Update
         </a>

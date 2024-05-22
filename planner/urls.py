@@ -24,6 +24,7 @@ from planner.views import (
     TaskTypeDeleteView,
     register,
     change_task_is_completed,
+    toggle_assign_to_task,
 )
 
 app_name = "planner"
@@ -135,5 +136,10 @@ urlpatterns = [
         "task-types/<int:pk>/delete/",
         TaskTypeDeleteView.as_view(),
         name="task-type-delete",
+    ),
+    path(
+        "tasks/<int:pk>/toggle-assign/",
+        toggle_assign_to_task,
+        name="toggle-task-assign",
     ),
 ]
