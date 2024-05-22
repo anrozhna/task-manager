@@ -132,6 +132,7 @@ class TaskTypeDetailView(LoginRequiredMixin, generic.DetailView):
     model = TaskType
     queryset = TaskType.objects.prefetch_related("tasks")
     template_name = "planner/task_type_detail.html"
+    context_object_name = "task_type"
 
 
 class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
@@ -139,12 +140,21 @@ class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
     fields = "__all__"
     success_url = reverse_lazy("planner:task-type-list")
     template_name = "planner/task_type_form.html"
+    context_object_name = "task_type"
 
 
 class TaskTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = TaskType
     fields = "__all__"
+    success_url = reverse_lazy("planner:task-type-list")
     template_name = "planner/task_type_form.html"
+    context_object_name = "task_type"
+
+
+class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = TaskType
+    template_name = "planner/task_type_confirm_delete.html"
+    context_object_name = "task_type"
     success_url = reverse_lazy("planner:task-type-list")
 
 
