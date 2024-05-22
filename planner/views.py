@@ -135,6 +135,14 @@ class TaskTypeDetailView(LoginRequiredMixin, generic.DetailView):
     context_object_name = "task_type"
 
 
+class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
+    model = TaskType
+    fields = "__all__"
+    success_url = reverse_lazy("planner:task-type-list")
+    template_name = "planner/task_type_form.html"
+    context_object_name = "task_type"
+
+
 @login_required
 def change_task_is_completed(request, task_id):
     if request.method == "POST":
