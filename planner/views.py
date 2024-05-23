@@ -190,10 +190,16 @@ def register(request):
 @login_required
 def toggle_assign_to_task(request, pk):
     worker = get_user_model().objects.get(id=request.user.id)
+
     if (
         Task.objects.get(id=pk) in worker.tasks.all()
     ):
         worker.tasks.remove(pk)
     else:
         worker.tasks.add(pk)
+
+    if request.method == "POST":
+        page_number = request.POST.get("page")
+        if page_number:
+            return redirect(f"{reverse('planner:task-list')}?page={page_number}")
     return HttpResponseRedirect(reverse_lazy("planner:task-detail", args=[pk]))
