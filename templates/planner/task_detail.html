@@ -5,11 +5,11 @@
     <div class="flex-grow-1 text-center">
       <h1 class="display-2">{{ task.name }}</h1>
     </div>
-    
+
     <div class="d-flex">
       <div class="me-2">
         <a href="{% url 'planner:task-update' pk=task.pk %}"
-           class="btn btn-outline-info d-inline-flex align-items-center" 
+           class="btn btn-outline-info d-inline-flex align-items-center"
            title="Update">
           Update
         </a>
@@ -25,13 +25,13 @@
   </div>
   <br>
 
-  <p class="text-uppercase text-muted h4">Description: 
+  <p class="text-uppercase text-muted h4">Description:
     <span class="fw-bold">{{ task.description }}</span>
   </p>
-  <p class="text-uppercase text-muted h4">Deadline: 
+  <p class="text-uppercase text-muted h4">Deadline:
     <span class="fw-bold">{{ task.deadline }}</span>
   </p>
-  <p class="text-uppercase text-muted h4">Is completed: 
+  <p class="text-uppercase text-muted h4">Is completed:
     {% if task.is_completed %}
       <span class="fw-normal text-success">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
@@ -48,23 +48,23 @@
       </span>
     {% endif %}
   </p>
-  <p class="text-uppercase text-muted h4">Priority: 
+  <p class="text-uppercase text-muted h4">Priority:
     {% if task.priority == "low" or task.priority == "medium" or task.priority == "Low" or task.priority == "Medium" %}
       <span class="fw-bold text-success">{{ task.priority }}</span>
     {% else %}
       <span class="fw-bold text-danger">{{ task.priority }}</span>
     {% endif %}
   </p>
-  <p class="text-uppercase text-muted h4">Task type: 
+  <p class="text-uppercase text-muted h4">Task type:
     <span class="fw-bold">{{ task.task_type }}</span>
   </p>
-  
+
 <hr>
   <div class="d-flex justify-content-between align-items-center py-4">
     <div class="flex-grow-1 text-center">
-      <h2 class="display-2">Assignees</h2>
+      <h2 class="display-3">Assignees</h2>
     </div>
-    
+
     <div class="d-flex">
       <div>
         {% if task in user.tasks.all %}
@@ -89,7 +89,7 @@
       <table class="table user-table table-hover align-items-center">
         <thead>
         <tr>
-  
+
           <th class="border-bottom">Username</th>
           <th class="border-bottom">Full name</th>
           <th class="border-bottom">Position</th>
