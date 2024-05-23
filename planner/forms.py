@@ -119,10 +119,7 @@ class WorkerSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name / username",
-                "aria-label": "Search"
-            }
+            attrs={"placeholder": "Search by name / username", "aria-label": "Search"}
         ),
     )
 
@@ -133,10 +130,7 @@ class TaskSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name",
-                "aria-label": "Search"
-            }
+            attrs={"placeholder": "Search by name", "aria-label": "Search"}
         ),
     )
 

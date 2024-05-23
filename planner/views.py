@@ -56,15 +56,18 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         form = WorkerSearchForm(self.request.GET)
-        queryset = get_user_model().objects.all().select_related(
-            "position"
-        ).prefetch_related("tasks")
+        queryset = (
+            get_user_model()
+            .objects.all()
+            .select_related("position")
+            .prefetch_related("tasks")
+        )
         if form.is_valid():
             query = form.cleaned_data["query"]
             return queryset.filter(
-                Q(username__icontains=query) |
-                Q(first_name__icontains=query) |
-                Q(last_name__icontains=query)
+                Q(username__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
             )
         return queryset
 
@@ -99,20 +102,16 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TaskListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = TaskSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = TaskSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
         form = TaskSearchForm(self.request.GET)
-        queryset = Task.objects.all().select_related(
-            "task_type"
-        ).prefetch_related("assignees")
+        queryset = (
+            Task.objects.all().select_related("task_type").prefetch_related("assignees")
+        )
         if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
 
@@ -146,18 +145,14 @@ class PositionListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PositionListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = PositionSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = PositionSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
         form = PositionSearchForm(self.request.GET)
         queryset = Position.objects.all().prefetch_related("workers")
         if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
 
@@ -193,18 +188,14 @@ class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TaskTypeListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = TaskTypeSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = TaskTypeSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
         form = TaskTypeSearchForm(self.request.GET)
         queryset = TaskType.objects.all().prefetch_related("tasks")
         if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
 
@@ -269,9 +260,7 @@ def register(request):
 def toggle_assign_to_task(request, pk):
     worker = get_user_model().objects.get(id=request.user.id)
 
-    if (
-        Task.objects.get(id=pk) in worker.tasks.all()
-    ):
+    if Task.objects.get(id=pk) in worker.tasks.all():
         worker.tasks.remove(pk)
     else:
         worker.tasks.add(pk)

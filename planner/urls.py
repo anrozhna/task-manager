@@ -42,11 +42,7 @@ urlpatterns = [
         WorkerDetailView.as_view(),
         name="worker-detail",
     ),
-    path(
-        "workers/create/",
-        WorkerCreateView.as_view(),
-        name="worker-create"
-    ),
+    path("workers/create/", WorkerCreateView.as_view(), name="worker-create"),
     path(
         "workers/<int:pk>/update/",
         WorkerUpdateView.as_view(),
