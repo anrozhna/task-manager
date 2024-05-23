@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1 class="d-flex justify-content-center display-2">Task types</h1>
@@ -19,14 +20,12 @@
       </div>
     </div>
     {% if task_type_list %}
-      <form class="col-12 col-lg-6 d-flex justify-content-lg-end">
-        <input type="text" class="form-control w-100 fmxw-300"
-               id="exampleInputIconLeft"
-               placeholder="Search Task Types Here"
-               aria-label="Search"
-               aria-describedby="basic-addon3">
-        <input type="submit" class="btn btn-gray-800" value="Search">
-      </form>
+      <form method="get" 
+              action="{% url 'planner:task-type-list' %}"
+              class="col-12 col-lg-6 d-flex justify-content-lg-end">
+          {{ search_form|crispy }}
+          <input type="submit" class="btn btn-gray-800" value="Search">
+        </form>
     {% endif %}
   </div>
   {% if task_type_list %}

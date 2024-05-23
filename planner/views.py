@@ -12,7 +12,11 @@ from planner.forms import (
     WorkerUpdateForm,
     UserRegistrationForm,
     TaskCreationForm,
-    TaskUpdateForm, WorkerSearchForm, TaskSearchForm, PositionSearchForm,
+    TaskUpdateForm,
+    WorkerSearchForm,
+    TaskSearchForm,
+    PositionSearchForm,
+    TaskTypeSearchForm,
 )
 from planner.models import Task, Position, TaskType
 
@@ -185,6 +189,23 @@ class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 9
     template_name = "planner/task_type_list.html"
     context_object_name = "task_type_list"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TaskTypeListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskTypeSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        form = TaskTypeSearchForm(self.request.GET)
+        queryset = TaskType.objects.all().prefetch_related("tasks")
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+        return queryset
 
 
 class TaskTypeDetailView(LoginRequiredMixin, generic.DetailView):

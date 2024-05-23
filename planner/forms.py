@@ -143,3 +143,7 @@ class TaskSearchForm(forms.Form):
 
 class PositionSearchForm(TaskSearchForm):
     pass
+
+
+class TaskTypeSearchForm(TaskSearchForm):
+    pass
