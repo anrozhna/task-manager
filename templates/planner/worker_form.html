@@ -7,42 +7,42 @@
 
 {% block content %}
   <br>
-    <h1 class="d-flex justify-content-center display-3">
+  <h1 class="d-flex justify-content-center display-3">
     {{ object|yesno:"Edit general information,Create new worker" }}
   </h1>
   <br>
   <div class="card card-body border-0 shadow mb-4">
-  {% if object %}
-    <table class="table user-table align-items-center">
-      <thead>
-      <tr>
+    {% if object %}
+      <table class="table user-table align-items-center">
+        <thead>
+        <tr>
 
-        <th class="border-bottom">Username</th>
-        <th class="border-bottom">Full name</th>
-        <th class="border-bottom">Position</th>
-        <th class="border-bottom">Is staff</th>
-        <th class="border-bottom">Is superuser</th>
-        <th class="border-bottom">Opened Tasks</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>
+          <th class="border-bottom">Username</th>
+          <th class="border-bottom">Full name</th>
+          <th class="border-bottom">Position</th>
+          <th class="border-bottom">Is staff</th>
+          <th class="border-bottom">Is superuser</th>
+          <th class="border-bottom">Opened Tasks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
 
             <div class="d-block">
               <span class="fw-bold">{{ worker.username }}</span>
             </div>
 
-        </td>
-        <td>
+          </td>
+          <td>
 
             <div class="d-block">
               <span class="fw-bold">{{ worker.first_name }} {{ worker.last_name }}</span>
               <div class="small text-gray">{{ worker.email }}</div>
             </div>
 
-        </td>
-        <td>
+          </td>
+          <td>
           <span class="fw-normal">
             {% if worker.position %}
               {{ worker.position.name }}
@@ -50,26 +50,26 @@
               Unemployed
             {% endif %}
           </span>
-        </td>
-        <td>
-          {% if worker.is_staff %}
-            <span class="fw-normal text-success">{{ worker.is_staff }}</span>
-          {% else %}
-            <span class="fw-normal text-danger">{{ worker.is_staff }}</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if worker.is_superuser %}
-            <span class="fw-normal text-success">{{ worker.is_superuser }}</span>
-          {% else %}
-            <span class="fw-normal text-danger">{{ worker.is_superuser }}</span>
-          {% endif %}
-        </td>
-        <td>
+          </td>
+          <td>
+            {% if worker.is_staff %}
+              <span class="fw-normal text-success">{{ worker.is_staff }}</span>
+            {% else %}
+              <span class="fw-normal text-danger">{{ worker.is_staff }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if worker.is_superuser %}
+              <span class="fw-normal text-success">{{ worker.is_superuser }}</span>
+            {% else %}
+              <span class="fw-normal text-danger">{{ worker.is_superuser }}</span>
+            {% endif %}
+          </td>
+          <td>
           <span class="fw-normal d-flex align-items-center">
             {% if not worker.tasks.count %}
-            <svg class="icon icon-xxs text-success me-2" fill="currentColor" viewBox="0 0 20 20"
-                 xmlns="http://www.w3.org/2000/svg">
+              <svg class="icon icon-xxs text-success me-2" fill="currentColor" viewBox="0 0 20 20"
+                   xmlns="http://www.w3.org/2000/svg">
               <path
                   fill-rule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -78,32 +78,33 @@
             {% else %}
               <svg class="icon icon-xxs text-purple me-2" fill="currentColor" viewBox="0 0 20 20"
                    xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
-                      clip-rule="evenodd">
+              <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd">
                 </path>
             {% endif %}
-              
-            </svg> 
+
+            </svg>
             {{ worker.tasks.count }} task{{ worker.tasks.count|pluralize }}
           </span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  {% endif %}
-  
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    {% endif %}
+
     <form method="post" action="" novalidate class="mt-5">
       {% csrf_token %}
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <div class="form-group">
-            {{ form.username|as_crispy_field  }}
+            {{ form.username|as_crispy_field }}
           </div>
         </div>
         <div class="col-md-6 mb-3">
           <div class="form-group">
-            {{ form.email|as_crispy_field  }}
+            {{ form.email|as_crispy_field }}
           </div>
         </div>
       </div>
@@ -111,12 +112,12 @@
       <div class="row">
         <div class="col-md-6 mb-3">
           <div>
-            {{ form.first_name|as_crispy_field  }}
+            {{ form.first_name|as_crispy_field }}
           </div>
         </div>
         <div class="col-md-6 mb-3">
           <div>
-            {{ form.last_name|as_crispy_field  }}
+            {{ form.last_name|as_crispy_field }}
           </div>
         </div>
       </div>
@@ -134,17 +135,17 @@
       </div>
       {% if not object %}
         <div class="row">
-        <div class="col-md-6 mb-3">
-          <div>
-            {{ form.password1|as_crispy_field  }}
+          <div class="col-md-6 mb-3">
+            <div>
+              {{ form.password1|as_crispy_field }}
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div>
+              {{ form.password2|as_crispy_field }}
+            </div>
           </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <div>
-            {{ form.password2|as_crispy_field  }}
-          </div>
-        </div>
-      </div>
       {% endif %}
       <div class="mt-3">
         <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save all</button>

@@ -4,37 +4,38 @@
 {% block content %}
   <h1 class="d-flex justify-content-center display-2">Workers</h1>
   <br>
-    <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-      <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
-        <div class="me-lg-3">
-          <div class="dropdown">
-            <a href="{% url 'planner:worker-create' %}" class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle"
-                    aria-haspopup="true" aria-expanded="false">
-              <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-              </svg>
-              New Worker
-            </a>
-          </div>
+  <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+    <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
+      <div class="me-lg-3">
+        <div class="dropdown">
+          <a href="{% url 'planner:worker-create' %}"
+             class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle"
+             aria-haspopup="true" aria-expanded="false">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            New Worker
+          </a>
         </div>
-      {% if worker_list %}
       </div>
-        <form method="get" 
+      {% if worker_list %}
+        </div>
+        <form method="get"
               action="{% url 'planner:worker-list' %}"
               class="col-12 col-lg-6 d-flex justify-content-lg-end">
           {{ search_form|crispy }}
           <input type="submit" class="btn btn-gray-800" value="Search">
         </form>
       {% endif %}
-    </div>
+  </div>
   {% if worker_list %}
     <div class="card card-body shadow border-0 table-wrapper table-responsive pb-4">
       <table class="table user-table table-hover align-items-center">
         <thead>
         <tr>
-  
+
           <th class="border-bottom">Username</th>
           <th class="border-bottom">Full name</th>
           <th class="border-bottom">Position</th>
@@ -46,9 +47,9 @@
         </tr>
         </thead>
         <tbody>
-          {% for worker in worker_list %}
-            {% include "includes/worker_list_tr.html" %}
-          {% endfor %}
+        {% for worker in worker_list %}
+          {% include "includes/worker_list_tr.html" %}
+        {% endfor %}
         </tbody>
       </table>
     </div>

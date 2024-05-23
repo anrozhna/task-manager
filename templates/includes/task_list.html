@@ -60,21 +60,21 @@
                   action="{% url 'planner:task-done' task_id=task.id %}">
               {% csrf_token %}
               <input type="hidden" name="page" value="{{ page_obj.number }}">
-                <button type="submit" class="btn dropdown-item d-flex align-items-center p-0 border-0 bg-transparent">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                       class="dropdown-icon text-gray-400 me-2">
-                    <path fill-rule="evenodd"
-                          d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-                          clip-rule="evenodd"></path>
-                  </svg>
-                  {% if not task.is_completed %}
-                    Mark as Done
-                  {% else %}
-                    Mark as In Progress
-                  {% endif %}
+              <button type="submit" class="btn dropdown-item d-flex align-items-center p-0 border-0 bg-transparent">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                     class="dropdown-icon text-gray-400 me-2">
+                  <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                {% if not task.is_completed %}
+                  Mark as Done
+                {% else %}
+                  Mark as In Progress
+                {% endif %}
               </button>
             </form>
-          
+
             <form class="dropdown-item d-flex align-items-center" method="post"
                   action="{% url 'planner:toggle-task-assign' pk=task.pk %}">
               {% csrf_token %}
@@ -93,7 +93,8 @@
               </button>
             </form>
 
-            <a class="dropdown-item d-flex align-items-center" href="{% url 'planner:task-update' pk=task.pk %}" title="Update">
+            <a class="dropdown-item d-flex align-items-center" href="{% url 'planner:task-update' pk=task.pk %}"
+               title="Update">
               <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
                    xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
@@ -104,7 +105,7 @@
               </svg>
               Update
             </a>
-            
+
             <a class="dropdown-item d-flex align-items-center" href="{% url 'planner:task-delete' pk=task.pk %}">
               <svg class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20"
                    xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +113,7 @@
                       d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                       clip-rule="evenodd"></path>
               </svg>
-              Delete 
+              Delete
             </a>
           </div>
         </div>

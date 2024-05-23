@@ -20,7 +20,7 @@
       </div>
     </div>
     {% if position_list %}
-      <form method="get" 
+      <form method="get"
             action="{% url 'planner:position-list' %}"
             class="col-12 col-lg-6 d-flex justify-content-lg-end">
         {{ search_form|crispy }}

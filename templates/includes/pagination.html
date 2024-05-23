@@ -1,7 +1,7 @@
 {% load query_transform %}
 {% if is_paginated %}
 
-<div class="row p-4">
+  <div class="row p-4">
     <div class="col-7 mt-1"> Showing {{ page_obj.number }} of {{ paginator.num_pages }}
       page{{ paginator.num_pages|pluralize }}</div>
     <div class="col-5">

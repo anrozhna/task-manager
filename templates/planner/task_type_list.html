@@ -20,12 +20,12 @@
       </div>
     </div>
     {% if task_type_list %}
-      <form method="get" 
-              action="{% url 'planner:task-type-list' %}"
-              class="col-12 col-lg-6 d-flex justify-content-lg-end">
-          {{ search_form|crispy }}
-          <input type="submit" class="btn btn-gray-800" value="Search">
-        </form>
+      <form method="get"
+            action="{% url 'planner:task-type-list' %}"
+            class="col-12 col-lg-6 d-flex justify-content-lg-end">
+        {{ search_form|crispy }}
+        <input type="submit" class="btn btn-gray-800" value="Search">
+      </form>
     {% endif %}
   </div>
   {% if task_type_list %}
@@ -50,7 +50,7 @@
                       </path>
                     </svg>
                   </a>
-                  <a class="d-flex align-items-center m-lg-2" 
+                  <a class="d-flex align-items-center m-lg-2"
                      href="{% url 'planner:task-type-delete' pk=task_type.pk %}"
                      title="Delete">
                     <svg class="icon icon-xs text-gray-400" fill="currentColor" viewBox="0 0 20 20"

@@ -10,9 +10,9 @@
       <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
         <div class="me-lg-3">
           <div class="dropdown">
-            <a href="{% url 'planner:task-create' %}" 
+            <a href="{% url 'planner:task-create' %}"
                class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle"
-                    aria-haspopup="true" aria-expanded="false">
+               aria-haspopup="true" aria-expanded="false">
               <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                    xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -25,7 +25,7 @@
         </div>
 
       </div>
-      <form method="get" 
+      <form method="get"
             action="{% url 'planner:task-list' %}"
             class="col-12 col-lg-6 d-flex justify-content-lg-end">
         {{ search_form|crispy }}
