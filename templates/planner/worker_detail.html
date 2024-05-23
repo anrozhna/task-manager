@@ -5,11 +5,11 @@
     <div class="flex-grow-1 text-center">
       <h1 class="display-2">{{ worker.first_name }} {{ worker.last_name }}</h1>
     </div>
-    
+
     <div class="d-flex">
       <div class="me-2">
         <a href="{% url 'planner:worker-update' pk=worker.pk %}"
-           class="btn btn-outline-info d-inline-flex align-items-center" 
+           class="btn btn-outline-info d-inline-flex align-items-center"
            title="Update">
           Update
         </a>
@@ -24,11 +24,11 @@
     </div>
   </div>
   <br>
-  
-  <p class="text-uppercase text-muted h4">Username: 
+
+  <p class="text-uppercase text-muted h4">Username:
     <span class="fw-bold">{{ worker.username }}</span>
   </p>
-  <p class="text-uppercase text-muted h4">Position: 
+  <p class="text-uppercase text-muted h4">Position:
     <span class="fw-bold">
       {% if worker.position %}
         {{ worker.position.name }}
@@ -37,7 +37,7 @@
       {% endif %}
     </span>
   </p>
-  <p class="text-uppercase text-muted h4">Is staff: 
+  <p class="text-uppercase text-muted h4">Is staff:
     {% if worker.is_staff %}
       <span class="fw-normal text-success">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
@@ -54,7 +54,7 @@
       </span>
     {% endif %}
   </p>
-  <p class="text-uppercase text-muted h4">Is superuser: 
+  <p class="text-uppercase text-muted h4">Is superuser:
     {% if worker.is_superuser %}
       <span class="fw-bold text-success">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon me-2 mb-1">
@@ -71,7 +71,7 @@
       </span>
     {% endif %}
   </p>
-  <p class="text-uppercase text-muted h4">Tasks: 
+  <p class="text-uppercase text-muted h4">Tasks:
   <span class="fw-bold">{{ worker.tasks.count }} task{{ worker.tasks.count|pluralize }}
   </span>
     {% if not worker.tasks.count %}
@@ -86,41 +86,19 @@
       {% else %}
         <svg class="icon text-purple me-2" fill="currentColor" viewBox="0 0 24 24"
              xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
                 clip-rule="evenodd">
           </path>
-        </svg> 
+        </svg>
       {% endif %}
-    
+
   </p>
   <hr>
+  <div class="flex-grow-1 text-center py-4 ms-n8">
+    <h2 class="display-3">Tasks</h2>
+  </div>
+
   {% if worker.tasks.all %}
-    <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-      <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
-        <div class="me-lg-3">
-          <div class="dropdown">
-            <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-              </svg>
-              New Task
-            </button>
-
-          </div>
-        </div>
-
-      </div>
-      <div class="col-12 col-lg-6 d-flex justify-content-lg-end">
-        <input type="text" class="form-control w-100 fmxw-300"
-               id="exampleInputIconLeft"
-               placeholder="Search Tasks Here"
-               aria-label="Search"
-               aria-describedby="basic-addon3">
-      </div>
-    </div>
 
     {% for task in worker.tasks.all %}
       {% include "includes/task_list.html" %}
