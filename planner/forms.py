@@ -120,7 +120,7 @@ class WorkerSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Search by name or username",
+                "placeholder": "Search by name / username",
                 "aria-label": "Search"
             }
         ),
