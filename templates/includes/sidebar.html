@@ -74,13 +74,6 @@
               d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg> </span>
           <span class="sidebar-text">Workers</span> </a>
       </li>
-      <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
-        <a href="{% url 'planner:position-list' %}" class="nav-link"> <span class="sidebar-icon"> 
-          <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-               xmlns="http://www.w3.org/2000/svg"><path
-              d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg> </span>
-          <span class="sidebar-text">Positions</span> </a>
-      </li>
       <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
         <a href="{% url 'planner:task-list' %}" class="nav-link">
                   <span class="sidebar-icon">
@@ -95,6 +88,13 @@
                   </span>
           <span class="sidebar-text">Tasks</span>
         </a>
+      </li>
+      <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
+        <a href="{% url 'planner:position-list' %}" class="nav-link"> <span class="sidebar-icon"> 
+          <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+               xmlns="http://www.w3.org/2000/svg"><path
+              d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg> </span>
+          <span class="sidebar-text">Positions</span> </a>
       </li>
       <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
         <a href="{% url 'planner:task-type-list' %}" class="nav-link">
