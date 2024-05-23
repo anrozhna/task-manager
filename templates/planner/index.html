@@ -94,13 +94,13 @@
         </div>
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
           <li class="nav-item me-2">
+            <a href="{% url 'planner:worker-detail' pk=user.pk %}" class="nav-link">My profile</a>
+          </li>
+          <li class="nav-item me-2">
             <a href="{% url 'planner:worker-list' %}" class="nav-link">Workers</a>
           </li>
           <li class="nav-item me-2">
-            <a href="" class="nav-link">Tasks</a>
-          </li>
-          <li class="nav-item me-2">
-            <a href="" class="nav-link">Unknown</a>
+            <a href="{% url 'planner:task-list' %}" class="nav-link">Tasks</a>
           </li>
         </ul>
       </div>
