@@ -2,6 +2,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
+  <h1 class="d-flex justify-content-center display-2">Workers</h1>
   <br>
     <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
@@ -20,13 +21,14 @@
         </div>
       {% if worker_list %}
       </div>
-        <div class="col-12 col-lg-6 d-flex justify-content-lg-end">
+        <form class="col-12 col-lg-6 d-flex justify-content-lg-end">
           <input type="text" class="form-control w-100 fmxw-300"
                  id="exampleInputIconLeft"
                  placeholder="Search Workers Here"
                  aria-label="Search"
                  aria-describedby="basic-addon3">
-        </div>
+          <input type="submit" class="btn btn-gray-800" value="Search">
+        </form>
       {% endif %}
     </div>
   {% if worker_list %}

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <h1 class="d-flex justify-content-center display-2">Positions</h1>
   <br>
   <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
     <div class="me-lg-3">
@@ -18,13 +19,14 @@
       </div>
     </div>
     {% if position_list %}
-      <div class="col-12 col-lg-6 d-flex justify-content-lg-end">
+      <form class="col-12 col-lg-6 d-flex justify-content-lg-end">
         <input type="text" class="form-control w-100 fmxw-300"
                id="exampleInputIconLeft"
                placeholder="Search Positions Here"
                aria-label="Search"
                aria-describedby="basic-addon3">
-      </div>
+        <input type="submit" class="btn btn-gray-800" value="Search">
+      </form>
     {% endif %}
   </div>
   {% if position_list %}
