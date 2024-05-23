@@ -21,12 +21,10 @@
         </div>
       {% if worker_list %}
       </div>
-        <form class="col-12 col-lg-6 d-flex justify-content-lg-end">
-          <input type="text" class="form-control w-100 fmxw-300"
-                 id="exampleInputIconLeft"
-                 placeholder="Search Workers Here"
-                 aria-label="Search"
-                 aria-describedby="basic-addon3">
+        <form method="get" 
+              action="{% url 'planner:worker-list' %}"
+              class="col-12 col-lg-6 d-flex justify-content-lg-end">
+          {{ search_form|crispy }}
           <input type="submit" class="btn btn-gray-800" value="Search">
         </form>
       {% endif %}

@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -11,7 +12,7 @@ from planner.forms import (
     WorkerUpdateForm,
     UserRegistrationForm,
     TaskCreationForm,
-    TaskUpdateForm,
+    TaskUpdateForm, WorkerSearchForm,
 )
 from planner.models import Task, Position, TaskType
 
@@ -42,6 +43,24 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = get_user_model()
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        query = self.request.GET.get("query", "")
+        context["search_form"] = WorkerSearchForm(initial={"query": query})
+        return context
+
+    def get_queryset(self):
+        form = WorkerSearchForm(self.request.GET)
+        queryset = get_user_model().objects.all()
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            return queryset.filter(
+                Q(username__icontains=query) |
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query)
+            )
+        return queryset
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
