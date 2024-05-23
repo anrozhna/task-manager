@@ -12,7 +12,7 @@ from planner.forms import (
     WorkerUpdateForm,
     UserRegistrationForm,
     TaskCreationForm,
-    TaskUpdateForm, WorkerSearchForm,
+    TaskUpdateForm, WorkerSearchForm, TaskSearchForm,
 )
 from planner.models import Task, Position, TaskType
 
@@ -52,7 +52,9 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         form = WorkerSearchForm(self.request.GET)
-        queryset = get_user_model().objects.all()
+        queryset = get_user_model().objects.all().select_related(
+            "position"
+        ).prefetch_related("tasks")
         if form.is_valid():
             query = form.cleaned_data["query"]
             return queryset.filter(
@@ -89,6 +91,25 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TaskListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        form = TaskSearchForm(self.request.GET)
+        queryset = Task.objects.all().select_related(
+            "task_type"
+        ).prefetch_related("assignees")
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+        return queryset
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
