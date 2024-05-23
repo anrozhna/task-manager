@@ -5,12 +5,18 @@ from django.db import models
 class TaskType(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self):
         return self.name
 
 
 class Position(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -34,6 +40,9 @@ class Task(models.Model):
     )
     assignees = models.ManyToManyField("Worker", related_name="tasks")
 
+    class Meta:
+        ordering = ["is_completed", "deadline"]
+
     def __str__(self):
         return f"{self.name} (priority: {self.priority})"
 
@@ -46,6 +55,9 @@ class Worker(AbstractUser):
         null=True,
         on_delete=models.SET_NULL,
     )
+
+    class Meta:
+        ordering = ["username"]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
