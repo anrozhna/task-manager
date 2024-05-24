@@ -93,7 +93,7 @@
       </table>
     {% endif %}
 
-    <div method="post" action="" novalidate class="mt-5">
+    <form method="post" action="" novalidate class="mt-5">
       {% csrf_token %}
 
       <div class="row">
@@ -161,7 +161,7 @@
         <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save all</button>
       </div>
     </form>
-  </div>
+  </form>
 
 
 {% endblock content %}
