@@ -128,7 +128,7 @@
             <label for="position">
               Position
             </label>
-            <a href="#" class="p">+ Add new position</a>
+            <a href="{% url 'planner:position-create' %}" class="p">+ Add new position</a>
           </div>
           {{ form.position|add_class:"form-select mb-0" }}
         </div>
