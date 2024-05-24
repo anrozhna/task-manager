@@ -93,7 +93,7 @@
       </table>
     {% endif %}
 
-    <form method="post" action="" novalidate class="mt-5">
+    <div method="post" action="" novalidate class="mt-5">
       {% csrf_token %}
 
       <div class="row">
@@ -132,6 +132,16 @@
           </div>
           {{ form.position|add_class:"form-select mb-0" }}
         </div>
+        {% if user.is_superuser %}
+          <div class="col-md-6 form-check form-switch">
+            <div class="mt-2">
+              {{ form.is_superuser|as_crispy_field }}
+            </div>
+            <div class="mt-2">
+              {{ form.is_staff|as_crispy_field }}
+            </div>
+          </div>
+        {% endif %}
       </div>
       {% if not object %}
         <div class="row">

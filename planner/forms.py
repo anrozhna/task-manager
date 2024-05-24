@@ -13,6 +13,8 @@ class WorkerCreationForm(UserCreationForm):
             "last_name",
             "email",
             "position",
+            "is_staff",
+            "is_superuser",
         )
         position = forms.CharField(
             required=False,
@@ -27,6 +29,8 @@ class WorkerUpdateForm(forms.ModelForm):
             "last_name",
             "email",
             "position",
+            "is_staff",
+            "is_superuser",
         )
         position = forms.CharField(
             required=False,
