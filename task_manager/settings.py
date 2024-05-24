@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap4",
-    "debug_toolbar",
     "widget_tweaks",
     "planner",
 ]
@@ -50,7 +49,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -141,7 +139,3 @@ AUTH_USER_MODEL = "planner.Worker"
 LOGIN_REDIRECT_URL = "/"
 
 LOGOUT_REDIRECT_URL = "/"
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
