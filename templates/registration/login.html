@@ -20,12 +20,17 @@
               <div class="text-center text-md-center mb-4 mt-md-0">
                 <h1 class="mb-0 h3">Sign in</h1>
                 <br>
-                <span>USERNAME: admin_user</span>
+                <span>ADMIN: admin_user / Admin_123</span>
                 <br>
-                <span>PASSWORD: Admin_123</span>
+                <span>USER: user / User_123</span>
               </div>
               <form action="" method="post" class="mt-4">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                  {% for error in form.non_field_errors %}
+                    <div class="text-danger mb-3">{{ error }}</div>
+                  {% endfor %}
+                {% endif %}
                 <!-- Form -->
                 <div class="form-group mb-4">
                   <label for="email">Username</label>
