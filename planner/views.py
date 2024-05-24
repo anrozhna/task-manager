@@ -76,6 +76,13 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = get_user_model().objects.select_related("position")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        worker = get_object_or_404(get_user_model(), pk=self.kwargs["pk"])
+        context["completed_tasks"] = worker.tasks.filter(is_completed=True)
+        context["incomplete_tasks"] = worker.tasks.filter(is_completed=False)
+        return context
+
 
 class WorkerCreateView(generic.CreateView):
     model = get_user_model()
