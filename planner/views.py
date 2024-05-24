@@ -74,7 +74,11 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
-    queryset = get_user_model().objects.select_related("position")
+    queryset = (
+        get_user_model().objects
+        .select_related("position")
+        .prefetch_related("tasks")
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -115,7 +119,9 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = TaskSearchForm(self.request.GET)
         queryset = (
-            Task.objects.all().select_related("task_type").prefetch_related("assignees")
+            Task.objects.all()
+            .select_related("task_type")
+            .prefetch_related("assignees")
         )
         if form.is_valid():
             return queryset.filter(name__icontains=form.cleaned_data["name"])
@@ -256,7 +262,9 @@ def register(request):
             new_user.set_password(user_form.cleaned_data["password1"])
             new_user.save()
             return render(
-                request, "registration/register_done.html", {"new_user": new_user}
+                request,
+                "registration/register_done.html",
+                {"new_user": new_user}
             )
     else:
         user_form = UserRegistrationForm()
@@ -275,5 +283,7 @@ def toggle_assign_to_task(request, pk):
     if request.method == "POST":
         page_number = request.POST.get("page")
         if page_number:
-            return redirect(f"{reverse('planner:task-list')}?page={page_number}")
+            return redirect(
+                f"{reverse('planner:task-list')}?page={page_number}"
+            )
     return HttpResponseRedirect(reverse_lazy("planner:task-detail", args=[pk]))
