@@ -86,7 +86,7 @@
           </div>
           <div class="mt-2 d-flex justify-content-between">
             <label for="{{ form.task_type.id_for_label }}">Task Type*</label>
-            <a href="#" class="p">+ Add new Task Type</a>
+            <a href="{% url 'planner:task-type-create' %}" class="p">+ Add new Task Type</a>
           </div>
           {{ form.task_type|as_crispy_field }}
         </div>
