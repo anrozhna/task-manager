@@ -39,7 +39,10 @@ class WorkerUpdateForm(forms.ModelForm):
 
 class UserRegistrationForm(forms.ModelForm):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Repeat password", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Repeat password",
+        widget=forms.PasswordInput
+    )
 
     class Meta:
         model = get_user_model()
@@ -66,7 +69,10 @@ class TaskCreationForm(forms.ModelForm):
         ("urgent", "Urgent"),
     )
     name = forms.CharField(
-        label="Name", widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
+        label="Name",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Enter task name"}
+        )
     )
     description = forms.CharField(
         label="Description",
@@ -123,7 +129,10 @@ class WorkerSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={"placeholder": "Search by name / username", "aria-label": "Search"}
+            attrs={
+                "placeholder": "Search by name / username",
+                "aria-label": "Search"
+            }
         ),
     )
 
@@ -134,7 +143,10 @@ class TaskSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={"placeholder": "Search by name", "aria-label": "Search"}
+            attrs={
+                "placeholder": "Search by name",
+                "aria-label": "Search"
+            }
         ),
     )
 
