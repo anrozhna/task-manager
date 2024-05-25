@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.http import HttpResponseNotAllowed, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
@@ -10,7 +10,6 @@ from django.views import generic
 from planner.forms import (
     WorkerCreationForm,
     WorkerUpdateForm,
-    UserRegistrationForm,
     TaskCreationForm,
     TaskUpdateForm,
     WorkerSearchForm,
@@ -242,48 +241,42 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("planner:task-type-list")
 
 
-@login_required
-def change_task_is_completed(request, task_id):
-    if request.method == "POST":
+class ChangeTaskIsCompletedView(LoginRequiredMixin, generic.RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        task_id = self.kwargs.get("task_id")
         task = get_object_or_404(Task, pk=task_id)
         task.is_completed = not task.is_completed
         task.save()
-        page_number = request.POST.get("page", 1)
-        return redirect(f"{reverse("planner:task-list")}?page={page_number}")
-    else:
-        return HttpResponseNotAllowed(["POST"])
+        page_number = self.request.POST.get("page", 1)
+        return f"{reverse("planner:task-list")}?page={page_number}"
 
 
-def register(request):
-    if request.method == "POST":
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            new_user = user_form.save(commit=False)
-            new_user.set_password(user_form.cleaned_data["password1"])
-            new_user.save()
-            return render(
-                request,
-                "registration/register_done.html",
-                {"new_user": new_user}
-            )
-    else:
-        user_form = UserRegistrationForm()
-    return render(request, "registration/register.html", {"form": user_form})
+class RegisterView(generic.CreateView):
+    model = get_user_model()
+    form_class = WorkerCreationForm
+    template_name = "registration/register.html"
+
+    def form_valid(self, form):
+        new_user = form.save()
+        return render(
+            self.request,
+            "registration/register_done.html",
+            {"new_user": new_user}
+        )
 
 
-@login_required
-def toggle_assign_to_task(request, pk):
-    worker = get_user_model().objects.get(id=request.user.id)
+class ToggleAssignToTaskView(LoginRequiredMixin, generic.RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        worker = get_user_model().objects.get(id=self.request.user.id)
+        task_id = self.kwargs.get("pk")
 
-    if Task.objects.get(id=pk) in worker.tasks.all():
-        worker.tasks.remove(pk)
-    else:
-        worker.tasks.add(pk)
+        if Task.objects.get(id=task_id) in worker.tasks.all():
+            worker.tasks.remove(task_id)
+        else:
+            worker.tasks.add(task_id)
 
-    if request.method == "POST":
-        page_number = request.POST.get("page")
+        page_number = self.request.POST.get("page")
         if page_number:
-            return redirect(
-                f"{reverse('planner:task-list')}?page={page_number}"
-            )
-    return HttpResponseRedirect(reverse_lazy("planner:task-detail", args=[pk]))
+            return reverse_lazy("planner:task-list") + f"?page={page_number}"
+        else:
+            return reverse_lazy("planner:task-detail", args=[task_id])

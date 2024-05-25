@@ -22,16 +22,20 @@ from planner.views import (
     TaskTypeCreateView,
     TaskTypeUpdateView,
     TaskTypeDeleteView,
-    register,
-    change_task_is_completed,
-    toggle_assign_to_task,
+    RegisterView,
+    ToggleAssignToTaskView,
+    ChangeTaskIsCompletedView,
 )
 
 app_name = "planner"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
-    path("register/", register, name="register"),
+    path(
+        "register/",
+        RegisterView.as_view(),
+        name="register"
+    ),
     path(
         "workers/",
         WorkerListView.as_view(),
@@ -65,7 +69,7 @@ urlpatterns = [
     ),
     path(
         "tasks/<int:task_id>/done/",
-        change_task_is_completed,
+        ChangeTaskIsCompletedView.as_view(),
         name="task-done",
     ),
     path(
@@ -135,7 +139,7 @@ urlpatterns = [
     ),
     path(
         "tasks/<int:pk>/toggle-assign/",
-        toggle_assign_to_task,
+        ToggleAssignToTaskView.as_view(),
         name="toggle-task-assign",
     ),
 ]
