@@ -10,10 +10,9 @@ class PublicTaskTypeTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_type_detail(self):
-        response = self.client.get(reverse(
-            "planner:task-type-detail",
-            kwargs={"pk": 1}
-        ))
+        response = self.client.get(
+            reverse("planner:task-type-detail", kwargs={"pk": 1})
+        )
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_type_create(self):
@@ -21,17 +20,15 @@ class PublicTaskTypeTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_type_update(self):
-        response = self.client.get(reverse(
-            "planner:task-type-update",
-            kwargs={"pk": 1}
-        ))
+        response = self.client.get(
+            reverse("planner:task-type-update", kwargs={"pk": 1})
+        )
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_type_delete(self):
-        response = self.client.get(reverse(
-            "planner:task-type-delete",
-            kwargs={"pk": 1}
-        ))
+        response = self.client.get(
+            reverse("planner:task-type-delete", kwargs={"pk": 1})
+        )
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -54,7 +51,9 @@ class PrivateTaskTypeTest(TestCase):
         self.client.force_login(self.worker)
 
     def test_task_types_list(self):
-        response = self.client.get(f"{reverse("planner:task-type-list")}?page=2")
+        response = self.client.get(
+            f"{reverse("planner:task-type-list")}?page=2"
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["task_type_list"]), 1)
 
@@ -66,14 +65,18 @@ class PrivateTaskTypeTest(TestCase):
         self.assertEqual(len(response.context["task_type_list"]), 9)
 
     def test_filter_list_task_types(self):
-        response = self.client.get(f"{reverse('planner:task-type-list')}?name=1")  # noqa Q000
+        response = self.client.get(
+            f"{reverse('planner:task-type-list')}?name=1"
+        )  # noqa Q000
         self.assertEqual(len(response.context["task_type_list"]), 1)
 
     def test_task_type_detail_correct_data(self):
-        response = self.client.get(reverse(
-            "planner:task-type-detail",
-            kwargs={"pk": self.task_type.id}
-        ))
+        response = self.client.get(
+            reverse(
+                "planner:task-type-detail",
+                kwargs={"pk": self.task_type.id}
+            )
+        )
 
         self.assertContains(response, self.task_type.name)
 
@@ -86,18 +89,21 @@ class PrivateTaskTypeTest(TestCase):
         data = {
             "name": "new_task_type",
         }
-        response = self.client.post(reverse("planner:task-type-create"), data=data)
+        response = self.client.post(
+            reverse("planner:task-type-create"),
+            data=data
+        )
         new_task_type = TaskType.objects.get(name=data["name"])
         self.assertEqual(new_task_type.name, data["name"])
-        self.assertRedirects(
-            response, reverse("planner:task-type-list")
-        )
+        self.assertRedirects(response, reverse("planner:task-type-list"))
 
     def test_task_type_update_get(self):
-        response = self.client.get(reverse(
-            "planner:task-type-update",
-            kwargs={"pk": self.task_type.id}
-        ))
+        response = self.client.get(
+            reverse(
+                "planner:task-type-update",
+                kwargs={"pk": self.task_type.id}
+            )
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.task_type.name)
 
@@ -105,33 +111,33 @@ class PrivateTaskTypeTest(TestCase):
         data = {
             "name": "updated_name",
         }
-        response = self.client.post(reverse(
-            "planner:task-type-update",
-            kwargs={"pk": self.task_type.id}
-        ), data=data)
-        updated_task_type = TaskType.objects.get(
-            id=self.task_type.id
+        response = self.client.post(
+            reverse(
+                "planner:task-type-update",
+                kwargs={"pk": self.task_type.id}
+            ),
+            data=data,
         )
+        updated_task_type = TaskType.objects.get(id=self.task_type.id)
         self.assertEqual(updated_task_type.name, data["name"])
-        self.assertRedirects(
-            response, reverse("planner:task-type-list")
-        )
+        self.assertRedirects(response, reverse("planner:task-type-list"))
 
     def test_task_type_delete_get(self):
-        response = self.client.get(reverse(
-            "planner:task-type-delete",
-            kwargs={"pk": self.task_type.id}
-        ))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            f"delete {self.task_type.name}"
+        response = self.client.get(
+            reverse(
+                "planner:task-type-delete",
+                kwargs={"pk": self.task_type.id}
+            )
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f"delete {self.task_type.name}")
 
     def test_task_type_delete_post(self):
-        self.client.post(reverse(
-            "planner:task-type-delete",
-            kwargs={"pk": self.task_type.id}
-        ))
+        self.client.post(
+            reverse(
+                "planner:task-type-delete",
+                kwargs={"pk": self.task_type.id}
+            )
+        )
         ls = Task.objects.filter(name=self.task_type.name)
         self.assertEqual(len(ls), 0)
