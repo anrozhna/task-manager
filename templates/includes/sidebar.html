@@ -1,0 +1,134 @@
+<nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
+  <a class="navbar-brand me-lg-5" href="/">
+    <img class="navbar-brand-dark" src="/static/assets/img/brand/light.svg" alt="Volt logo"/> <img
+      class="navbar-brand-light" src="/static/assets/img/brand/dark.svg" alt="Volt logo"/>
+  </a>
+  <div class="d-flex align-items-center">
+    <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
+  <div class="sidebar-inner px-4 pt-3">
+    <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
+      <div class="d-flex align-items-center">
+        <div class="avatar-lg me-4">
+          <img src="/static/assets/img/team/profile-picture-3.jpg" class="card-img-top rounded-circle border-white"
+               alt="Bonnie Green">
+        </div>
+        <div class="d-block">
+          <h2 class="h5 mb-3">Hi, Jane</h2>
+          <a href="{% url 'login' %}" class="btn btn-secondary btn-sm d-inline-flex align-items-center">
+            <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Sign Out
+          </a>
+        </div>
+      </div>
+      <div class="collapse-close d-md-none">
+        <a href="#sidebarMenu" data-bs-toggle="collapse"
+           data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="true"
+           aria-label="Toggle navigation">
+          <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <ul class="nav flex-column pt-3 pt-md-0">
+      <li class="nav-item">
+        <a href="/" class="nav-link d-flex align-items-center">
+                  <span class="sidebar-icon">
+                    <img src="/static/assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo">
+                  </span>
+          <span class="mt-1 ms-1 sidebar-text">Task Manager</span>
+        </a>
+      </li>
+      <li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
+        <a href="{% url 'planner:worker-detail' pk=user.pk %}" class="nav-link">
+                  <span class="sidebar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                         class="icon icon-xs me-2">
+                    <path fill-rule="evenodd"
+                          d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                          clip-rule="evenodd"></path>
+                    </svg>
+
+                  </span>
+          <span class="sidebar-text">My Profile</span>
+        </a>
+      </li>
+      <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
+        <a href="{% url 'planner:worker-list' %}" class="nav-link"> <span class="sidebar-icon"> 
+          <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+               xmlns="http://www.w3.org/2000/svg"><path
+              d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg> </span>
+          <span class="sidebar-text">Workers</span> </a>
+      </li>
+      <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
+        <a href="{% url 'planner:task-list' %}" class="nav-link">
+                  <span class="sidebar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                         class="icon icon-xs me-2">
+                      <path fill-rule="evenodd"
+                            d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z"
+                            clip-rule="evenodd"></path>
+                      <path
+                          d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z"></path>
+                    </svg>
+                  </span>
+          <span class="sidebar-text">Tasks</span>
+        </a>
+      </li>
+      <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
+        <a href="{% url 'planner:position-list' %}" class="nav-link"> <span class="sidebar-icon"> 
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon icon-xs me-2">
+            <path fill-rule="evenodd"
+                  d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  clip-rule="evenodd"></path>
+            <path
+                d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
+          </svg>
+        </span>
+          <span class="sidebar-text">Positions</span> </a>
+      </li>
+      <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
+        <a href="{% url 'planner:task-type-list' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon icon-xs me-2">
+              <path fill-rule="evenodd"
+                    d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 0 0 5.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 0 0-2.122-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z"
+                    clip-rule="evenodd"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Task Types</span>
+        </a>
+      </li>
+      <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+      <li class="nav-item">
+        <form action="{% url 'logout' %}" method="post" class="nav-link">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-link">
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg> 
+            </span>
+            <span class="text-white sidebar-text">Logout</span>
+          </button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
