@@ -87,7 +87,7 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class WorkerCreateView(generic.CreateView):
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     model = get_user_model()
     form_class = WorkerCreationForm
     success_url = reverse_lazy("planner:worker-list")
