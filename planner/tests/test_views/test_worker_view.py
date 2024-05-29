@@ -11,10 +11,9 @@ class PublicWorkerTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_detail(self):
-        response = self.client.get(reverse(
-            "planner:worker-detail",
-            kwargs={"pk": 1}
-        ))
+        response = self.client.get(
+            reverse("planner:worker-detail", kwargs={"pk": 1})
+        )
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_create(self):
@@ -22,17 +21,15 @@ class PublicWorkerTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_update(self):
-        response = self.client.get(reverse(
-            "planner:worker-update",
-            kwargs={"pk": 1}
-        ))
+        response = self.client.get(
+            reverse("planner:worker-update", kwargs={"pk": 1})
+        )
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_delete(self):
-        response = self.client.get(reverse(
-            "planner:worker-delete",
-            kwargs={"pk": 1}
-        ))
+        response = self.client.get(
+            reverse("planner:worker-delete", kwargs={"pk": 1})
+        )
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -40,16 +37,14 @@ class PrivateWorkerTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         number_of_workers = 6
-        position = Position.objects.create(
-            name="Test Position"
-        )
+        position = Position.objects.create(name="Test Position")
         for driver_id in range(number_of_workers):
             Worker.objects.create(
                 username=f"username_{driver_id}",
                 password="test_password",
                 first_name=f"first_{driver_id}",
                 last_name=f"last_{driver_id}",
-                position=position
+                position=position,
             )
 
     def setUp(self):
@@ -83,10 +78,9 @@ class PrivateWorkerTest(TestCase):
         self.assertEqual(len(response_last_name.context["worker_list"]), 1)
 
     def test_worker_detail_correct_data(self):
-        response = self.client.get(reverse(
-            "planner:worker-detail",
-            kwargs={"pk": self.worker.id}
-        ))
+        response = self.client.get(
+            reverse("planner:worker-detail", kwargs={"pk": self.worker.id})
+        )
         self.assertContains(response, self.worker.username)
         self.assertContains(response, self.worker.position)
 
@@ -108,19 +102,19 @@ class PrivateWorkerTest(TestCase):
             "first_name": "First",
             "last_name": "Last",
         }
-        response = self.client.post(reverse("planner:worker-create"), data=data)
+        response = self.client.post(
+            reverse("planner:worker-create"),
+            data=data
+        )
         new_driver = get_user_model().objects.get(username=data["username"])
         self.assertEqual(new_driver.first_name, data["first_name"])
         self.assertEqual(new_driver.last_name, data["last_name"])
-        self.assertRedirects(
-            response, reverse("planner:worker-list")
-        )
+        self.assertRedirects(response, reverse("planner:worker-list"))
 
     def test_worker_update_get(self):
-        response = self.client.get(reverse(
-            "planner:worker-update",
-            kwargs={"pk": self.worker.id}
-        ))
+        response = self.client.get(
+            reverse("planner:worker-update", kwargs={"pk": self.worker.id})
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.worker.position)
 
@@ -131,25 +125,22 @@ class PrivateWorkerTest(TestCase):
             "last_name": "Lastname",
             "email": "emailunique@gmail.com",
         }
-        response = self.client.post(reverse(
-            "planner:worker-update",
-            kwargs={"pk": self.worker.id}
-        ), data=data)
-        new_driver = get_user_model().objects.get(
-            id=self.worker.id
+        response = self.client.post(
+            reverse(
+                "planner:worker-update",
+                kwargs={"pk": self.worker.id}),
+            data=data
         )
+        new_driver = get_user_model().objects.get(id=self.worker.id)
         self.assertEqual(new_driver.first_name, data["first_name"])
         self.assertEqual(new_driver.last_name, data["last_name"])
         self.assertEqual(new_driver.email, data["email"])
-        self.assertRedirects(
-            response, reverse("planner:worker-list")
-        )
+        self.assertRedirects(response, reverse("planner:worker-list"))
 
     def test_worker_delete_get(self):
-        response = self.client.get(reverse(
-            "planner:worker-delete",
-            kwargs={"pk": self.worker.id}
-        ))
+        response = self.client.get(
+            reverse("planner:worker-delete", kwargs={"pk": self.worker.id})
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
@@ -157,9 +148,8 @@ class PrivateWorkerTest(TestCase):
         )
 
     def test_driver_delete_post(self):
-        self.client.post(reverse(
-            "planner:worker-delete",
-            kwargs={"pk": self.worker.id}
-        ))
+        self.client.post(
+            reverse("planner:worker-delete", kwargs={"pk": self.worker.id})
+        )
         ls = get_user_model().objects.filter(username=self.worker.username)
         self.assertEqual(len(ls), 0)

@@ -59,7 +59,8 @@ class WorkerModelTest(TestCase):
     def test_str(self):
         self.assertEqual(
             str(self.worker),
-            f"{self.worker.first_name} {self.worker.last_name} ({self.worker.username})"
+            f"{self.worker.first_name} {self.worker.last_name} "
+            f"({self.worker.username})",
         )
 
     def test_create_with_position(self):
@@ -68,4 +69,3 @@ class WorkerModelTest(TestCase):
         self.assertEqual(self.worker.first_name, self.first_name)
         self.assertEqual(self.worker.last_name, self.last_name)
         self.assertEqual(self.worker.position, self.position)
-

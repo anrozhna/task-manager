@@ -1,7 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from planner.forms import TaskCreationForm, TaskUpdateForm, WorkerCreationForm, WorkerSearchForm, TaskSearchForm
+from planner.forms import (
+    TaskCreationForm,
+    TaskUpdateForm,
+    WorkerCreationForm,
+    WorkerSearchForm,
+    TaskSearchForm,
+)
 from planner.models import TaskType, Task, Position
 
 
@@ -136,7 +142,7 @@ class SearchFormTests(TestCase):
             position=position,
         )
         task = Task.objects.create(
-            name=f"test_task",
+            name="test_task",
             description="test",
             deadline="2024-05-10T12:00:00Z",
             priority="high",
