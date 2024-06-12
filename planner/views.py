@@ -247,8 +247,8 @@ class ChangeTaskIsCompletedView(LoginRequiredMixin, generic.RedirectView):
         task = get_object_or_404(Task, pk=task_id)
         task.is_completed = not task.is_completed
         task.save()
-        page_number = self.request.POST.get("page", 1)
-        return f"{reverse("planner:task-list")}?page={page_number}"
+        full_url = self.request.POST.get("full_url", reverse("planner:task-list"))
+        return full_url
 
 
 class RegisterView(generic.CreateView):

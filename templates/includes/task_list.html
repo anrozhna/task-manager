@@ -59,7 +59,7 @@
             <form class="dropdown-item d-flex align-items-center" method="post"
                   action="{% url 'planner:task-done' task_id=task.id %}">
               {% csrf_token %}
-              <input type="hidden" name="page" value="{{ page_obj.number }}">
+              <input type="hidden" name="full_url" value="{{ request.build_absolute_uri }}">
               <button type="submit" class="btn dropdown-item d-flex align-items-center p-0 border-0 bg-transparent">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                      class="dropdown-icon text-gray-400 me-2">
