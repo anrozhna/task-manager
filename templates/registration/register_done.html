@@ -1,0 +1,10 @@
+{% extends "registration/register.html" %}
+
+{% block registration %}
+  <div class="text-center text-md-center mb-4 mt-md-0">
+    <h1 class="mb-0 h3">Your account has been successfully created. Now you can log in.</h1>
+  </div>
+  <div class="d-grid">
+    <a class="btn btn-gray-800" href="{% url "login" %}">Log In</a>
+  </div>
+{% endblock %}

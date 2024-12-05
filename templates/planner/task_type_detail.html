@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center py-4">
+    <div class="flex-grow-1 text-center">
+      <h1 class="display-2">{{ task_type.name }} task{{ task_type.tasks.all|pluralize }}</h1>
+    </div>
+
+    <div class="d-flex">
+      <div class="me-2">
+        <a href="{% url 'planner:task-type-update' pk=task_type.pk %}"
+           class="btn btn-outline-info d-inline-flex align-items-center"
+           title="Update">
+          Update
+        </a>
+      </div>
+      <div>
+        <a href="{% url 'planner:task-type-delete' pk=task_type.pk %}"
+           class="btn btn-outline-danger d-inline-flex align-items-center"
+           title="Delete">
+          Delete
+        </a>
+      </div>
+    </div>
+  </div>
+  <br>
+  {% if task_type.tasks %}
+    {% for task in task_type.tasks.all %}
+      {% include "includes/task_list.html" %}
+    {% endfor %}
+  {% else %}
+    <span class="h6 fw-bold d-flex justify-content-center">There are no task types.</span>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center py-4">
+    <div class="flex-grow-1 text-center">
+      <h1 class="display-2">{{ position.name }}{{ position.workers.all|pluralize }}</h1>
+    </div>
+
+    <div class="d-flex">
+      <div class="me-2">
+        <a href="{% url 'planner:position-update' pk=position.pk %}"
+           class="btn btn-outline-info d-inline-flex align-items-center"
+           title="Update">
+          Update
+        </a>
+      </div>
+      <div>
+        <a href="{% url 'planner:position-delete' pk=position.pk %}"
+           class="btn btn-outline-danger d-inline-flex align-items-center"
+           title="Delete">
+          Delete
+        </a>
+      </div>
+    </div>
+  </div>
+  <br>
+  {% if position.workers %}
+    <div class="card card-body shadow border-0 table-wrapper table-responsive pb-4">
+      <table class="table user-table table-hover align-items-center">
+        <thead>
+        <tr>
+
+          <th class="border-bottom">Username</th>
+          <th class="border-bottom">Full name</th>
+          <th class="border-bottom">Position</th>
+          <th class="border-bottom">Is staff</th>
+          <th class="border-bottom">Is superuser</th>
+          <th class="border-bottom">Opened Tasks</th>
+          <th class="border-bottom">Update</th>
+          <th class="border-bottom">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for worker in position.workers.all %}
+          {% include "includes/worker_list_tr.html" %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <span class="h6 fw-bold d-flex justify-content-center">There are no positions.</span>
+  {% endif %}
+{% endblock %}
