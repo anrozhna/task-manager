@@ -72,17 +72,27 @@
     <div class="d-flex">
       <div>
         {% if task in user.tasks.all %}
-          <a href="{% url 'planner:toggle-task-assign' pk=task.pk %}"
-             class="btn btn-danger d-inline-flex align-items-center"
-             title="Delete">
-            Delete me from the task
-          </a>
+          <form method="post"
+                action="{% url 'planner:toggle-task-assign' pk=task.pk %}"
+                class="d-inline">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-danger d-inline-flex align-items-center"
+                    title="Unassign">
+              Delete me from the task
+            </button>
+          </form>
         {% else %}
-          <a href="{% url 'planner:toggle-task-assign' pk=task.pk %}"
-             class="btn btn-info d-inline-flex align-items-center"
-             title="Delete">
-            Assign me to the task
-          </a>
+          <form method="post"
+                action="{% url 'planner:toggle-task-assign' pk=task.pk %}"
+                class="d-inline">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-info d-inline-flex align-items-center"
+                    title="Assign">
+              Assign me to the task
+            </button>
+          </form>
         {% endif %}
       </div>
     </div>
