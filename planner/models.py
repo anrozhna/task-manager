@@ -35,7 +35,7 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=10, choices=Priority.choices)
     task_type = models.ForeignKey(
-        TaskType, related_name="tasks", on_delete=models.CASCADE
+        TaskType, related_name="tasks", on_delete=models.PROTECT
     )
     assignees = models.ManyToManyField("Worker", related_name="tasks")
 
