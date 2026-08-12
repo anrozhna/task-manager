@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
@@ -265,18 +264,19 @@ class RegisterView(generic.CreateView):
         )
 
 
-class ToggleAssignToTaskView(LoginRequiredMixin, generic.RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        worker = get_user_model().objects.get(id=self.request.user.id)
+class ToggleAssignToTaskView(LoginRequiredMixin, generic.View):
+    def post(self, request, *args, **kwargs):
+        worker = request.user
         task_id = self.kwargs.get("pk")
 
-        if Task.objects.get(id=task_id) in worker.tasks.all():
+        if worker.tasks.filter(id=task_id).exists():
             worker.tasks.remove(task_id)
         else:
             worker.tasks.add(task_id)
 
-        page_number = self.request.POST.get("page")
+        page_number = request.POST.get("page")
         if page_number:
-            return reverse_lazy("planner:task-list") + f"?page={page_number}"
+            url = reverse_lazy("planner:task-list") + f"?page={page_number}"
         else:
-            return reverse_lazy("planner:task-detail", args=[task_id])
+            url = reverse_lazy("planner:task-detail", args=[task_id])
+        return HttpResponseRedirect(url)
