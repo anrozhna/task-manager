@@ -23,18 +23,17 @@ class Position(models.Model):
 
 
 class Task(models.Model):
-    PRIORITY_CHOICES = (
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("urgent", "Urgent"),
-    )
+    class Priority(models.TextChoices):
+        LOW = "low", "Low"
+        MEDIUM = "medium", "Medium"
+        HIGH = "high", "High"
+        URGENT = "urgent", "Urgent"
 
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     deadline = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
-    priority = models.CharField(max_length=255, choices=PRIORITY_CHOICES)
+    priority = models.CharField(max_length=10, choices=Priority.choices)
     task_type = models.ForeignKey(
         TaskType, related_name="tasks", on_delete=models.CASCADE
     )
