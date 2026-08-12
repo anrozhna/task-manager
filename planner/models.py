@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class TaskType(models.Model):
@@ -43,6 +44,10 @@ class Task(models.Model):
 
     class Meta:
         ordering = ["deadline"]
+        indexes = [
+            models.Index(fields=["is_completed", "deadline"]),
+            models.Index(fields=["priority"]),
+        ]
 
     def __str__(self):
         return f"{self.name} (priority: {self.priority})"
