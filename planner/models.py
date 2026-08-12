@@ -23,6 +23,20 @@ class Position(models.Model):
         return self.name
 
 
+class TaskQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_completed=False)
+
+    def completed(self):
+        return self.filter(is_completed=True)
+
+    def overdue(self):
+        return self.filter(is_completed=False, deadline__lt=timezone.now())
+
+    def for_worker(self, worker):
+        return self.filter(assignees=worker)
+
+
 class Task(models.Model):
     class Priority(models.TextChoices):
         LOW = "low", "Low"
@@ -42,12 +56,18 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = TaskQuerySet.as_manager()
+
     class Meta:
         ordering = ["deadline"]
         indexes = [
             models.Index(fields=["is_completed", "deadline"]),
             models.Index(fields=["priority"]),
         ]
+
+    @property
+    def is_overdue(self) -> bool:
+        return not self.is_completed and self.deadline < timezone.now()
 
     def __str__(self):
         return f"{self.name} (priority: {self.priority})"
