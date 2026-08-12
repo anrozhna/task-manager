@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import generic
 
 from planner.forms import (
@@ -240,14 +241,19 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("planner:task-type-list")
 
 
-class ChangeTaskIsCompletedView(LoginRequiredMixin, generic.RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
+class ChangeTaskIsCompletedView(LoginRequiredMixin, generic.View):
+    def post(self, request, *args, **kwargs):
         task_id = self.kwargs.get("task_id")
         task = get_object_or_404(Task, pk=task_id)
         task.is_completed = not task.is_completed
-        task.save()
-        full_url = self.request.POST.get("full_url", reverse("planner:task-list"))
-        return full_url
+        task.save(update_fields=["is_completed"])
+
+        full_url = request.POST.get("full_url", "")
+        if full_url and url_has_allowed_host_and_scheme(
+            full_url, allowed_hosts={request.get_host()}
+        ):
+            return HttpResponseRedirect(full_url)
+        return HttpResponseRedirect(reverse("planner:task-list"))
 
 
 class RegisterView(generic.CreateView):
