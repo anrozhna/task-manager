@@ -38,6 +38,8 @@ class Task(models.Model):
         TaskType, related_name="tasks", on_delete=models.PROTECT
     )
     assignees = models.ManyToManyField("Worker", related_name="tasks")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["deadline"]
