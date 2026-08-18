@@ -139,6 +139,23 @@ class WorkerFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("password2", form.errors)
 
+    def test_worker_creation_form_ignores_privilege_fields(self):
+        """Regression test: is_staff/is_superuser must not be settable
+        via the public registration form, even if submitted explicitly.
+        """
+        form_data = {
+            "username": "sneaky_user",
+            "password1": "strong_password",
+            "password2": "strong_password",
+            "is_staff": True,
+            "is_superuser": True,
+        }
+        form = WorkerCreationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        user = form.save()
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+
 
 class SearchFormTests(TestCase):
     @classmethod
