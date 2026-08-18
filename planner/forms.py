@@ -2,11 +2,12 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-from planner.models import Task, TaskType
+from planner.models import Task, TaskType, Position
 
 
 class WorkerCreationForm(UserCreationForm):
-    position = forms.CharField(
+    position = forms.ModelChoiceField(
+        queryset=Position.objects.all(),
         required=False,
     )
 
@@ -24,7 +25,8 @@ class WorkerCreationForm(UserCreationForm):
 
 
 class WorkerUpdateForm(forms.ModelForm):
-    position = forms.CharField(
+    position = forms.ModelChoiceField(
+        queryset=Position.objects.all(),
         required=False,
     )
 
