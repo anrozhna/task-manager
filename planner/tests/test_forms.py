@@ -1,5 +1,8 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.utils import timezone
 
 from planner.forms import (
     TaskCreationForm,
@@ -9,6 +12,11 @@ from planner.forms import (
     TaskSearchForm,
 )
 from planner.models import TaskType, Task, Position
+
+
+def aware_deadline(*args, **kwargs):
+    """Helper to build a timezone-aware deadline for form/model tests."""
+    return timezone.make_aware(datetime.datetime(*args, **kwargs))
 
 
 class TaskFormTests(TestCase):
@@ -30,7 +38,9 @@ class TaskFormTests(TestCase):
         form_data = {
             "name": "Test Task",
             "description": "Test Description",
-            "deadline": "2024-06-01T14:00",
+            "deadline": aware_deadline(
+                2024, 6, 1, 14, 0
+            ).strftime("%Y-%m-%dT%H:%M"),
             "priority": "low",
             "task_type": self.task_type.id,
             "assignees": [self.worker.id],
@@ -61,7 +71,7 @@ class TaskFormTests(TestCase):
         task = Task.objects.create(
             name="Test Task",
             description="Test Description",
-            deadline="2024-06-01T14:00",
+            deadline=aware_deadline(2024, 6, 1, 14, 0),
             priority="low",
             task_type=self.task_type,
         )
@@ -69,7 +79,9 @@ class TaskFormTests(TestCase):
         form_data = {
             "name": "Updated Task",
             "description": "Updated Description",
-            "deadline": "2024-06-01T14:00",
+            "deadline": aware_deadline(
+                2024, 6, 1, 14, 0
+            ).strftime("%Y-%m-%dT%H:%M"),
             "priority": "high",
             "task_type": self.task_type.id,
             "assignees": [self.worker.id],
@@ -108,8 +120,6 @@ class WorkerFormTests(TestCase):
             "last_name": "User",
             "email": "newuser@example.com",
             "position": self.position,
-            "is_staff": False,
-            "is_superuser": False,
         }
         form = WorkerCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -144,7 +154,7 @@ class SearchFormTests(TestCase):
         task = Task.objects.create(
             name="test_task",
             description="test",
-            deadline="2024-05-10T12:00:00Z",
+            deadline=aware_deadline(2024, 5, 10, 12, 0),
             priority="high",
             task_type=task_type,
         )
