@@ -39,6 +39,21 @@ class WorkerUpdateForm(forms.ModelForm):
         )
 
 
+class WorkerAdminForm(forms.ModelForm):
+    """Used only by staff/superusers to manage worker permissions."""
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            "first_name",
+            "last_name",
+            "email",
+            "position",
+            "is_staff",
+            "is_superuser",
+        )
+
+
 class TaskCreationForm(forms.ModelForm):
     PRIORITY_CHOICES = (
         ("low", "Low"),
@@ -47,10 +62,7 @@ class TaskCreationForm(forms.ModelForm):
         ("urgent", "Urgent"),
     )
     name = forms.CharField(
-        label="Name",
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter task name"}
-        )
+        label="Name", widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
     )
     description = forms.CharField(
         label="Description",
@@ -107,10 +119,7 @@ class WorkerSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name / username",
-                "aria-label": "Search"
-            }
+            attrs={"placeholder": "Search by name / username", "aria-label": "Search"}
         ),
     )
 
@@ -121,10 +130,7 @@ class TaskSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name",
-                "aria-label": "Search"
-            }
+            attrs={"placeholder": "Search by name", "aria-label": "Search"}
         ),
     )
 
