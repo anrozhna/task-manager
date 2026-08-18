@@ -24,18 +24,18 @@ class WorkerCreationForm(UserCreationForm):
 
 
 class WorkerUpdateForm(forms.ModelForm):
+    position = forms.CharField(
+        required=False,
+    )
+
     class Meta:
         model = get_user_model()
-        fields = UserCreationForm.Meta.fields + (
+        fields = (
+            "username",
             "first_name",
             "last_name",
             "email",
             "position",
-            "is_staff",
-            "is_superuser",
-        )
-        position = forms.CharField(
-            required=False,
         )
 
 
