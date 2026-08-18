@@ -181,5 +181,5 @@ class PrivateTaskTest(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("planner:task-list") + "?page=1"
+            reverse("planner:task-list")
         )
