@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from planner.forms import (
@@ -155,6 +156,63 @@ class WorkerFormTests(TestCase):
         user = form.save()
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
+
+
+class WorkerUpdateViewPermissionTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        get_user_model().objects.create_user(
+            username="regular_user", password="12345",
+        )
+        get_user_model().objects.create_user(
+            username="other_user", password="12345",
+        )
+        get_user_model().objects.create_user(
+            username="staff_user", password="12345", is_staff=True,
+        )
+
+    def test_regular_user_cannot_edit_other_worker(self):
+        self.client.login(username="regular_user", password="12345")
+        other = get_user_model().objects.get(username="other_user")
+        response = self.client.post(
+            reverse("planner:worker-update", args=[other.pk]),
+            {"username": "hacked", "email": "x@x.com"},
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_regular_user_cannot_self_promote(self):
+        self.client.login(username="regular_user", password="12345")
+        user = get_user_model().objects.get(username="regular_user")
+        response = self.client.post(
+            reverse("planner:worker-update", args=[user.pk]),
+            {
+                "username": "regular_user",
+                "email": "x@x.com",
+                "is_staff": True,
+                "is_superuser": True,
+            },
+        )
+        user.refresh_from_db()
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+        self.assertRedirects(response, reverse("planner:worker-list"))
+
+    def test_staff_can_edit_any_worker_permissions(self):
+        self.client.login(username="staff_user", password="12345")
+        other = get_user_model().objects.get(username="other_user")
+        response = self.client.post(
+            reverse("planner:worker-update", args=[other.pk]),
+            {
+                "first_name": "Updated",
+                "last_name": "Name",
+                "email": "x@x.com",
+                "is_staff": True,
+                "is_superuser": False,
+            },
+        )
+        other.refresh_from_db()
+        self.assertTrue(other.is_staff)
+        self.assertRedirects(response, reverse("planner:worker-list"))
 
 
 class SearchFormTests(TestCase):
