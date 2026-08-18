@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin
+)
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -16,8 +19,13 @@ from planner.forms import (
     TaskSearchForm,
     PositionSearchForm,
     TaskTypeSearchForm,
+    WorkerAdminForm,
 )
-from planner.models import Task, Position, TaskType
+from planner.models import (
+    Task,
+    Position,
+    TaskType
+)
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -93,11 +101,23 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("planner:worker-list")
 
 
-class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+class WorkerUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.UpdateView
+):
     model = get_user_model()
-    form_class = WorkerUpdateForm
     template_name = "planner/worker_form.html"
     success_url = reverse_lazy("planner:worker-list")
+
+    def test_func(self):
+        target = self.get_object()
+        return self.request.user.is_staff or self.request.user.pk == target.pk
+
+    def get_form_class(self):
+        if self.request.user.is_staff:
+            return WorkerAdminForm
+        return WorkerUpdateForm
 
 
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
