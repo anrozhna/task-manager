@@ -6,6 +6,10 @@ from planner.models import Task, TaskType
 
 
 class WorkerCreationForm(UserCreationForm):
+    position = forms.CharField(
+        required=False,
+    )
+
     class Meta:
         model = get_user_model()
         fields = UserCreationForm.Meta.fields + (
@@ -13,8 +17,6 @@ class WorkerCreationForm(UserCreationForm):
             "last_name",
             "email",
             "position",
-            "is_staff",
-            "is_superuser",
         )
         position = forms.CharField(
             required=False,
