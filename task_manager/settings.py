@@ -25,12 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 load_dotenv()
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "task-manager-mul5.onrender.com"]
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost"
+).split(",")
 
 
 # Application definition
@@ -164,3 +166,11 @@ LOGOUT_REDIRECT_URL = "/"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
