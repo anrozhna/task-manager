@@ -35,22 +35,45 @@ On Windows:
 ```bash
 venv\Scripts\activate
 ```
-    
+
 On Mac:
 ```bash
 source venv/bin/activate
 ```
 
 4. Install dependencies
+
+For running the application:
 ```bash
 pip install -r requirements.txt
 ```
 
-5. Perform database migrations:
+For local development (adds linters and formatters — black, flake8):
+```bash
+pip install -r requirements-dev.txt
+```
+
+5. Configure environment variables
+
+Copy the sample file and fill in your own values:
+```bash
+cp .env.sample .env
+```
+
+`.env` requires at minimum:
+- `DJANGO_SECRET_KEY` — required, the app will not start without it. Generate one with:
+  ```bash
+  python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+  ```
+- `DJANGO_DEBUG` — `True` for local development, `False` in production.
+- `DJANGO_ALLOWED_HOSTS` — comma-separated list of allowed hosts.
+- `DATABASE_URL` — optional; if not set, the app falls back to a local SQLite database.
+
+6. Perform database migrations:
 ```bash
 python manage.py migrate
 ```
-6. Run the development server:
+7. Run the development server:
 ```bash
 python manage.py runserver
 ```
@@ -63,9 +86,14 @@ python manage.py runserver
 5. Create new tasks and assign them to the existing workers as needed.
 6. Workers can log in to the application to view assigned tasks, update task statuses, and mark tasks as completed.
 
+## Running tests
+```bash
+python manage.py test planner
+```
+
 ## Technologies used
-1. Django: A high-level Python web framework that encourages rapid development and clean, pragmatic design.
+1. Django 5.2 (LTS): A high-level Python web framework that encourages rapid development and clean, pragmatic design.
 2. HTML/CSS: Standard markup and styling languages used for creating the application's user interface.
 3. Bootstrap: A front-end framework for developing websites.
-4. SQLite: A lightweight relational database management system used for storing application data during development and testing.
+4. SQLite (local development) / PostgreSQL (production): Relational database management, configurable via the `DATABASE_URL` environment variable.
 5. Django Testing Framework: Built-in testing framework provided by Django, including TestCase for writing unit tests.
