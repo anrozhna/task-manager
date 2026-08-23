@@ -26,9 +26,6 @@ load_dotenv()
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
-
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-
 # Application definition
 
 INSTALLED_APPS = [
