@@ -110,6 +110,22 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = get_user_model()
     success_url = reverse_lazy("planner:worker-list")
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        password = request.POST.get("password", "")
+
+        if not request.user.check_password(password):
+            return render(
+                request,
+                self.get_template_names(),
+                {
+                    "worker": self.object,
+                    "error": "Incorrect password. Please try again.",
+                },
+            )
+
+        return super().post(request, *args, **kwargs)
+
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
