@@ -89,9 +89,12 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        worker = get_object_or_404(get_user_model(), pk=self.kwargs["pk"])
-        context["completed_tasks"] = worker.tasks.filter(is_completed=True)
-        context["incomplete_tasks"] = worker.tasks.filter(is_completed=False)
+        context["completed_tasks"] = self.object.tasks.filter(
+            is_completed=True
+        )
+        context["incomplete_tasks"] = self.object.tasks.filter(
+            is_completed=False
+        )
         return context
 
 
