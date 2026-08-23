@@ -73,7 +73,7 @@ class TaskFormTests(TestCase):
             name="Test Task",
             description="Test Description",
             deadline=aware_deadline(2024, 6, 1, 14, 0),
-            priority="low",
+            priority=Task.Priority.LOW,
             task_type=self.task_type,
         )
         task.assignees.add(self.worker)
@@ -230,7 +230,7 @@ class SearchFormTests(TestCase):
             name="test_task",
             description="test",
             deadline=aware_deadline(2024, 5, 10, 12, 0),
-            priority="high",
+            priority=Task.Priority.HIGH,
             task_type=task_type,
         )
         task.assignees.add(worker.id)
