@@ -35,8 +35,7 @@ class TaskModelTest(TestCase):
 
     def test_str(self):
         self.assertEqual(
-            str(self.task),
-            f"{self.task.name} (priority: {self.task.priority})"
+            str(self.task), f"{self.task.name} (priority: {self.task.priority})"
         )
 
 

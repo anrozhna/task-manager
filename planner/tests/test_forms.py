@@ -39,9 +39,7 @@ class TaskFormTests(TestCase):
         form_data = {
             "name": "Test Task",
             "description": "Test Description",
-            "deadline": aware_deadline(
-                2024, 6, 1, 14, 0
-            ).strftime("%Y-%m-%dT%H:%M"),
+            "deadline": aware_deadline(2024, 6, 1, 14, 0).strftime("%Y-%m-%dT%H:%M"),
             "priority": "low",
             "task_type": self.task_type.id,
             "assignees": [self.worker.id],
@@ -80,9 +78,7 @@ class TaskFormTests(TestCase):
         form_data = {
             "name": "Updated Task",
             "description": "Updated Description",
-            "deadline": aware_deadline(
-                2024, 6, 1, 14, 0
-            ).strftime("%Y-%m-%dT%H:%M"),
+            "deadline": aware_deadline(2024, 6, 1, 14, 0).strftime("%Y-%m-%dT%H:%M"),
             "priority": "high",
             "task_type": self.task_type.id,
             "assignees": [self.worker.id],
@@ -162,13 +158,17 @@ class WorkerUpdateViewPermissionTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         get_user_model().objects.create_user(
-            username="regular_user", password="12345",
+            username="regular_user",
+            password="12345",
         )
         get_user_model().objects.create_user(
-            username="other_user", password="12345",
+            username="other_user",
+            password="12345",
         )
         get_user_model().objects.create_user(
-            username="staff_user", password="12345", is_staff=True,
+            username="staff_user",
+            password="12345",
+            is_staff=True,
         )
 
     def test_regular_user_cannot_edit_other_worker(self):

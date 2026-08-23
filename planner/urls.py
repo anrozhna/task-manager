@@ -31,11 +31,7 @@ app_name = "planner"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
-    path(
-        "register/",
-        RegisterView.as_view(),
-        name="register"
-    ),
+    path("register/", RegisterView.as_view(), name="register"),
     path(
         "workers/",
         WorkerListView.as_view(),

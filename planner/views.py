@@ -1,8 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    UserPassesTestMixin
-)
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -21,11 +18,7 @@ from planner.forms import (
     TaskTypeSearchForm,
     WorkerAdminForm,
 )
-from planner.models import (
-    Task,
-    Position,
-    TaskType
-)
+from planner.models import Task, Position, TaskType
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -82,19 +75,13 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = (
-        get_user_model().objects
-        .select_related("position")
-        .prefetch_related("tasks")
+        get_user_model().objects.select_related("position").prefetch_related("tasks")
     )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["completed_tasks"] = self.object.tasks.filter(
-            is_completed=True
-        )
-        context["incomplete_tasks"] = self.object.tasks.filter(
-            is_completed=False
-        )
+        context["completed_tasks"] = self.object.tasks.filter(is_completed=True)
+        context["incomplete_tasks"] = self.object.tasks.filter(is_completed=False)
         return context
 
 
@@ -104,11 +91,7 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("planner:worker-list")
 
 
-class WorkerUpdateView(
-    LoginRequiredMixin,
-    UserPassesTestMixin,
-    generic.UpdateView
-):
+class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = get_user_model()
     template_name = "planner/worker_form.html"
     success_url = reverse_lazy("planner:worker-list")
@@ -141,9 +124,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = TaskSearchForm(self.request.GET)
         queryset = (
-            Task.objects.all()
-            .select_related("task_type")
-            .prefetch_related("assignees")
+            Task.objects.all().select_related("task_type").prefetch_related("assignees")
         )
         if form.is_valid():
             return queryset.filter(name__icontains=form.cleaned_data["name"])
@@ -287,9 +268,7 @@ class RegisterView(generic.CreateView):
     def form_valid(self, form):
         new_user = form.save()
         return render(
-            self.request,
-            "registration/register_done.html",
-            {"new_user": new_user}
+            self.request, "registration/register_done.html", {"new_user": new_user}
         )
 
 
