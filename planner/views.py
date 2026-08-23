@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import generic
 
 from planner.forms import (
@@ -16,6 +16,7 @@ from planner.forms import (
     TaskSearchForm,
     PositionSearchForm,
     TaskTypeSearchForm,
+    WorkerAdminForm,
 )
 from planner.models import Task, Position, TaskType
 
@@ -74,16 +75,13 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = (
-        get_user_model().objects
-        .select_related("position")
-        .prefetch_related("tasks")
+        get_user_model().objects.select_related("position").prefetch_related("tasks")
     )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        worker = get_object_or_404(get_user_model(), pk=self.kwargs["pk"])
-        context["completed_tasks"] = worker.tasks.filter(is_completed=True)
-        context["incomplete_tasks"] = worker.tasks.filter(is_completed=False)
+        context["completed_tasks"] = self.object.tasks.filter(is_completed=True)
+        context["incomplete_tasks"] = self.object.tasks.filter(is_completed=False)
         return context
 
 
@@ -93,16 +91,40 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("planner:worker-list")
 
 
-class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = get_user_model()
-    form_class = WorkerUpdateForm
     template_name = "planner/worker_form.html"
     success_url = reverse_lazy("planner:worker-list")
+
+    def test_func(self):
+        target = self.get_object()
+        return self.request.user.is_staff or self.request.user.pk == target.pk
+
+    def get_form_class(self):
+        if self.request.user.is_staff:
+            return WorkerAdminForm
+        return WorkerUpdateForm
 
 
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = get_user_model()
     success_url = reverse_lazy("planner:worker-list")
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        password = request.POST.get("password", "")
+
+        if not request.user.check_password(password):
+            return render(
+                request,
+                self.get_template_names(),
+                {
+                    "worker": self.object,
+                    "error": "Incorrect password. Please try again.",
+                },
+            )
+
+        return super().post(request, *args, **kwargs)
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
@@ -118,9 +140,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = TaskSearchForm(self.request.GET)
         queryset = (
-            Task.objects.all()
-            .select_related("task_type")
-            .prefetch_related("assignees")
+            Task.objects.all().select_related("task_type").prefetch_related("assignees")
         )
         if form.is_valid():
             return queryset.filter(name__icontains=form.cleaned_data["name"])
@@ -241,14 +261,19 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("planner:task-type-list")
 
 
-class ChangeTaskIsCompletedView(LoginRequiredMixin, generic.RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
+class ChangeTaskIsCompletedView(LoginRequiredMixin, generic.View):
+    def post(self, request, *args, **kwargs):
         task_id = self.kwargs.get("task_id")
         task = get_object_or_404(Task, pk=task_id)
         task.is_completed = not task.is_completed
-        task.save()
-        full_url = self.request.POST.get("full_url", reverse("planner:task-list"))
-        return full_url
+        task.save(update_fields=["is_completed"])
+
+        full_url = request.POST.get("full_url", "")
+        if full_url and url_has_allowed_host_and_scheme(
+            full_url, allowed_hosts={request.get_host()}
+        ):
+            return HttpResponseRedirect(full_url)
+        return HttpResponseRedirect(reverse("planner:task-list"))
 
 
 class RegisterView(generic.CreateView):
@@ -259,24 +284,23 @@ class RegisterView(generic.CreateView):
     def form_valid(self, form):
         new_user = form.save()
         return render(
-            self.request,
-            "registration/register_done.html",
-            {"new_user": new_user}
+            self.request, "registration/register_done.html", {"new_user": new_user}
         )
 
 
-class ToggleAssignToTaskView(LoginRequiredMixin, generic.RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        worker = get_user_model().objects.get(id=self.request.user.id)
+class ToggleAssignToTaskView(LoginRequiredMixin, generic.View):
+    def post(self, request, *args, **kwargs):
+        worker = request.user
         task_id = self.kwargs.get("pk")
 
-        if Task.objects.get(id=task_id) in worker.tasks.all():
+        if worker.tasks.filter(id=task_id).exists():
             worker.tasks.remove(task_id)
         else:
             worker.tasks.add(task_id)
 
-        page_number = self.request.POST.get("page")
+        page_number = request.POST.get("page")
         if page_number:
-            return reverse_lazy("planner:task-list") + f"?page={page_number}"
+            url = reverse_lazy("planner:task-list") + f"?page={page_number}"
         else:
-            return reverse_lazy("planner:task-detail", args=[task_id])
+            url = reverse_lazy("planner:task-detail", args=[task_id])
+        return HttpResponseRedirect(url)

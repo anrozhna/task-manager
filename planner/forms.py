@@ -2,10 +2,15 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-from planner.models import Task, TaskType
+from planner.models import Task, TaskType, Position
 
 
 class WorkerCreationForm(UserCreationForm):
+    position = forms.ModelChoiceField(
+        queryset=Position.objects.all(),
+        required=False,
+    )
+
     class Meta:
         model = get_user_model()
         fields = UserCreationForm.Meta.fields + (
@@ -13,18 +18,33 @@ class WorkerCreationForm(UserCreationForm):
             "last_name",
             "email",
             "position",
-            "is_staff",
-            "is_superuser",
-        )
-        position = forms.CharField(
-            required=False,
         )
 
 
 class WorkerUpdateForm(forms.ModelForm):
+    position = forms.ModelChoiceField(
+        queryset=Position.objects.all(),
+        required=False,
+    )
+
     class Meta:
         model = get_user_model()
-        fields = UserCreationForm.Meta.fields + (
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "position",
+        )
+
+
+class WorkerAdminForm(forms.ModelForm):
+    """Used only by staff/superusers to manage worker permissions."""
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            "username",
             "first_name",
             "last_name",
             "email",
@@ -32,23 +52,11 @@ class WorkerUpdateForm(forms.ModelForm):
             "is_staff",
             "is_superuser",
         )
-        position = forms.CharField(
-            required=False,
-        )
 
 
 class TaskCreationForm(forms.ModelForm):
-    PRIORITY_CHOICES = (
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("urgent", "Urgent"),
-    )
     name = forms.CharField(
-        label="Name",
-        widget=forms.TextInput(
-            attrs={"placeholder": "Enter task name"}
-        )
+        label="Name", widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
     )
     description = forms.CharField(
         label="Description",
@@ -69,10 +77,8 @@ class TaskCreationForm(forms.ModelForm):
 
     priority = forms.ChoiceField(
         required=True,
-        choices=PRIORITY_CHOICES,
-        widget=forms.Select(
-            attrs={"class": "form-select"},
-        ),
+        choices=Task.Priority.choices,
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     task_type = forms.ModelChoiceField(
@@ -105,10 +111,7 @@ class WorkerSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name / username",
-                "aria-label": "Search"
-            }
+            attrs={"placeholder": "Search by name / username", "aria-label": "Search"}
         ),
     )
 
@@ -119,10 +122,7 @@ class TaskSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name",
-                "aria-label": "Search"
-            }
+            attrs={"placeholder": "Search by name", "aria-label": "Search"}
         ),
     )
 

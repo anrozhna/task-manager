@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class TaskType(models.Model):
@@ -22,26 +23,51 @@ class Position(models.Model):
         return self.name
 
 
-class Task(models.Model):
-    PRIORITY_CHOICES = (
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("urgent", "Urgent"),
-    )
+class TaskQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_completed=False)
 
-    name = models.CharField(max_length=255, unique=True)
+    def completed(self):
+        return self.filter(is_completed=True)
+
+    def overdue(self):
+        return self.filter(is_completed=False, deadline__lt=timezone.now())
+
+    def for_worker(self, worker):
+        return self.filter(assignees=worker)
+
+
+class Task(models.Model):
+    class Priority(models.TextChoices):
+        LOW = "low", "Low"
+        MEDIUM = "medium", "Medium"
+        HIGH = "high", "High"
+        URGENT = "urgent", "Urgent"
+
+    name = models.CharField(max_length=255)
     description = models.TextField()
     deadline = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
-    priority = models.CharField(max_length=255, choices=PRIORITY_CHOICES)
+    priority = models.CharField(max_length=10, choices=Priority.choices)
     task_type = models.ForeignKey(
-        TaskType, related_name="tasks", on_delete=models.CASCADE
+        TaskType, related_name="tasks", on_delete=models.PROTECT
     )
     assignees = models.ManyToManyField("Worker", related_name="tasks")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = TaskQuerySet.as_manager()
 
     class Meta:
         ordering = ["deadline"]
+        indexes = [
+            models.Index(fields=["is_completed", "deadline"]),
+            models.Index(fields=["priority"]),
+        ]
+
+    @property
+    def is_overdue(self) -> bool:
+        return not self.is_completed and self.deadline < timezone.now()
 
     def __str__(self):
         return f"{self.name} (priority: {self.priority})"

@@ -10,9 +10,7 @@ class PublicTaskTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_detail(self):
-        response = self.client.get(
-            reverse("planner:task-detail", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:task-detail", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_create(self):
@@ -20,15 +18,11 @@ class PublicTaskTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_update(self):
-        response = self.client.get(
-            reverse("planner:task-update", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:task-update", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_task_delete(self):
-        response = self.client.get(
-            reverse("planner:task-delete", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:task-delete", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -42,10 +36,7 @@ class PrivateTaskTest(TestCase):
         assignees = []
         for worker_id in range(number_of_assignees):
             assignees.append(
-                Worker.objects.create(
-                    username=f"Username{worker_id}",
-                    password="12345"
-                )
+                Worker.objects.create(username=f"Username{worker_id}", password="12345")
             )
 
         for task_id in range(number_of_tasks):
@@ -53,7 +44,7 @@ class PrivateTaskTest(TestCase):
                 name=f"name_{task_id}",
                 description="test",
                 deadline="2024-05-10T12:00:00Z",
-                priority="high",
+                priority=Task.Priority.HIGH,
                 task_type=task_type,
             )
             task.assignees.set(assignees)
@@ -141,10 +132,7 @@ class PrivateTaskTest(TestCase):
             "assignees": [self.worker.id],
         }
         response = self.client.post(
-            reverse(
-                "planner:task-update",
-                kwargs={"pk": self.task.id}),
-            data=data
+            reverse("planner:task-update", kwargs={"pk": self.task.id}), data=data
         )
         updated_task = Task.objects.get(id=self.task.id)
         self.assertEqual(updated_task.description, data["description"])
@@ -168,18 +156,10 @@ class PrivateTaskTest(TestCase):
         self.assertRedirects(response, reverse("planner:task-list"))
 
     def test_change_task_is_completed(self):
-        task_is_completed_before = Task.objects.get(
-            id=self.task.id
-        ).is_completed
+        task_is_completed_before = Task.objects.get(id=self.task.id).is_completed
         response = self.client.post(
             reverse("planner:task-done", kwargs={"task_id": self.task.id})
         )
         updated_task = Task.objects.get(id=self.task.id)
-        self.assertNotEqual(
-            updated_task.is_completed,
-            task_is_completed_before
-        )
-        self.assertRedirects(
-            response,
-            reverse("planner:task-list") + "?page=1"
-        )
+        self.assertNotEqual(updated_task.is_completed, task_is_completed_before)
+        self.assertRedirects(response, reverse("planner:task-list"))

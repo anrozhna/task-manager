@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from planner.models import TaskType, Position, Task
+from planner.tests.test_forms import aware_deadline
 
 
 class TaskTypeModelTest(TestCase):
@@ -27,15 +28,14 @@ class TaskModelTest(TestCase):
         self.task = Task.objects.create(
             name="test",
             description="test",
-            deadline="2024-05-10T12:00:00Z",
-            priority="High",
+            deadline=aware_deadline(2024, 5, 10, 12, 0),
+            priority=Task.Priority.HIGH,
             task_type=self.task_type,
         )
 
     def test_str(self):
         self.assertEqual(
-            str(self.task),
-            f"{self.task.name} (priority: {self.task.priority})"
+            str(self.task), f"{self.task.name} (priority: {self.task.priority})"
         )
 
 

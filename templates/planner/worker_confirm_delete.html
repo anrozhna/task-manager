@@ -16,7 +16,21 @@
       <h2 class="swal2-title" id="swal2-title" style="display: block;">Are you sure to
         delete {{ worker.first_name }} {{ worker.last_name }}?</h2>
       <div class="swal2-html-container" style="display: block;">You won't be able to revert this!</div>
-      <input class="swal2-input" style="display: none;">
+
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter your password to confirm"
+        class="swal2-input"
+        style="display: flex;"
+        required
+      >
+      {% if error %}
+        <div class="swal2-validation-message" id="swal2-validation-message" style="display: flex;">
+          {{ error }}
+        </div>
+      {% endif %}
+
       <input type="file" class="swal2-file" style="display: none;">
       <div class="swal2-range" style="display: none;">
         <input type="range">
@@ -28,7 +42,6 @@
         <span class="swal2-label"></span>
       </label>
       <textarea class="swal2-textarea" style="display: none;"></textarea>
-      <div class="swal2-validation-message" id="swal2-validation-message" style="display: none;"></div>
       <div class="swal2-actions">
         <div class="swal2-loader"></div>
         <input type="submit" value="Yes, delete it!" class="swal2-cancel swal2-styled swal2-default-outline"
@@ -46,5 +59,4 @@
       </div>
     </div>
   </form>
-
 {% endblock %}

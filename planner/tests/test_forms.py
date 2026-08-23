@@ -1,5 +1,9 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
 
 from planner.forms import (
     TaskCreationForm,
@@ -9,6 +13,11 @@ from planner.forms import (
     TaskSearchForm,
 )
 from planner.models import TaskType, Task, Position
+
+
+def aware_deadline(*args, **kwargs):
+    """Helper to build a timezone-aware deadline for form/model tests."""
+    return timezone.make_aware(datetime.datetime(*args, **kwargs))
 
 
 class TaskFormTests(TestCase):
@@ -30,7 +39,7 @@ class TaskFormTests(TestCase):
         form_data = {
             "name": "Test Task",
             "description": "Test Description",
-            "deadline": "2024-06-01T14:00",
+            "deadline": aware_deadline(2024, 6, 1, 14, 0).strftime("%Y-%m-%dT%H:%M"),
             "priority": "low",
             "task_type": self.task_type.id,
             "assignees": [self.worker.id],
@@ -61,15 +70,15 @@ class TaskFormTests(TestCase):
         task = Task.objects.create(
             name="Test Task",
             description="Test Description",
-            deadline="2024-06-01T14:00",
-            priority="low",
+            deadline=aware_deadline(2024, 6, 1, 14, 0),
+            priority=Task.Priority.LOW,
             task_type=self.task_type,
         )
         task.assignees.add(self.worker)
         form_data = {
             "name": "Updated Task",
             "description": "Updated Description",
-            "deadline": "2024-06-01T14:00",
+            "deadline": aware_deadline(2024, 6, 1, 14, 0).strftime("%Y-%m-%dT%H:%M"),
             "priority": "high",
             "task_type": self.task_type.id,
             "assignees": [self.worker.id],
@@ -108,8 +117,6 @@ class WorkerFormTests(TestCase):
             "last_name": "User",
             "email": "newuser@example.com",
             "position": self.position,
-            "is_staff": False,
-            "is_superuser": False,
         }
         form = WorkerCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -129,6 +136,84 @@ class WorkerFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("password2", form.errors)
 
+    def test_worker_creation_form_ignores_privilege_fields(self):
+        """Regression test: is_staff/is_superuser must not be settable
+        via the public registration form, even if submitted explicitly.
+        """
+        form_data = {
+            "username": "sneaky_user",
+            "password1": "strong_password",
+            "password2": "strong_password",
+            "is_staff": True,
+            "is_superuser": True,
+        }
+        form = WorkerCreationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        user = form.save()
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+
+
+class WorkerUpdateViewPermissionTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        get_user_model().objects.create_user(
+            username="regular_user",
+            password="12345",
+        )
+        get_user_model().objects.create_user(
+            username="other_user",
+            password="12345",
+        )
+        get_user_model().objects.create_user(
+            username="staff_user",
+            password="12345",
+            is_staff=True,
+        )
+
+    def test_regular_user_cannot_edit_other_worker(self):
+        self.client.login(username="regular_user", password="12345")
+        other = get_user_model().objects.get(username="other_user")
+        response = self.client.post(
+            reverse("planner:worker-update", args=[other.pk]),
+            {"username": "hacked", "email": "x@x.com"},
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_regular_user_cannot_self_promote(self):
+        self.client.login(username="regular_user", password="12345")
+        user = get_user_model().objects.get(username="regular_user")
+        response = self.client.post(
+            reverse("planner:worker-update", args=[user.pk]),
+            {
+                "username": "regular_user",
+                "email": "x@x.com",
+                "is_staff": True,
+                "is_superuser": True,
+            },
+        )
+        user.refresh_from_db()
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+        self.assertRedirects(response, reverse("planner:worker-list"))
+
+    def test_staff_can_edit_any_worker_permissions(self):
+        self.client.login(username="staff_user", password="12345")
+        other = get_user_model().objects.get(username="other_user")
+        response = self.client.post(
+            reverse("planner:worker-update", args=[other.pk]),
+            {
+                "first_name": "Updated",
+                "last_name": "Name",
+                "email": "x@x.com",
+                "is_staff": True,
+                "is_superuser": False,
+            },
+        )
+        other.refresh_from_db()
+        self.assertTrue(other.is_staff)
+        self.assertRedirects(response, reverse("planner:worker-list"))
+
 
 class SearchFormTests(TestCase):
     @classmethod
@@ -144,8 +229,8 @@ class SearchFormTests(TestCase):
         task = Task.objects.create(
             name="test_task",
             description="test",
-            deadline="2024-05-10T12:00:00Z",
-            priority="high",
+            deadline=aware_deadline(2024, 5, 10, 12, 0),
+            priority=Task.Priority.HIGH,
             task_type=task_type,
         )
         task.assignees.add(worker.id)

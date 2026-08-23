@@ -11,9 +11,7 @@ class PublicWorkerTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_detail(self):
-        response = self.client.get(
-            reverse("planner:worker-detail", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:worker-detail", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_create(self):
@@ -21,15 +19,11 @@ class PublicWorkerTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_update(self):
-        response = self.client.get(
-            reverse("planner:worker-update", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:worker-update", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_worker_delete(self):
-        response = self.client.get(
-            reverse("planner:worker-delete", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:worker-delete", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -102,10 +96,7 @@ class PrivateWorkerTest(TestCase):
             "first_name": "First",
             "last_name": "Last",
         }
-        response = self.client.post(
-            reverse("planner:worker-create"),
-            data=data
-        )
+        response = self.client.post(reverse("planner:worker-create"), data=data)
         new_driver = get_user_model().objects.get(username=data["username"])
         self.assertEqual(new_driver.first_name, data["first_name"])
         self.assertEqual(new_driver.last_name, data["last_name"])
@@ -126,10 +117,7 @@ class PrivateWorkerTest(TestCase):
             "email": "emailunique@gmail.com",
         }
         response = self.client.post(
-            reverse(
-                "planner:worker-update",
-                kwargs={"pk": self.worker.id}),
-            data=data
+            reverse("planner:worker-update", kwargs={"pk": self.worker.id}), data=data
         )
         new_driver = get_user_model().objects.get(id=self.worker.id)
         self.assertEqual(new_driver.first_name, data["first_name"])
@@ -143,8 +131,7 @@ class PrivateWorkerTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(
-            response,
-            f"delete {self.worker.first_name} {self.worker.last_name}"
+            response, f"delete {self.worker.first_name} {self.worker.last_name}"
         )
 
     def test_driver_delete_post(self):
