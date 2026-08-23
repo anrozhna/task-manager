@@ -19,9 +19,6 @@ class WorkerCreationForm(UserCreationForm):
             "email",
             "position",
         )
-        position = forms.CharField(
-            required=False,
-        )
 
 
 class WorkerUpdateForm(forms.ModelForm):
@@ -57,12 +54,6 @@ class WorkerAdminForm(forms.ModelForm):
 
 
 class TaskCreationForm(forms.ModelForm):
-    PRIORITY_CHOICES = (
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("urgent", "Urgent"),
-    )
     name = forms.CharField(
         label="Name", widget=forms.TextInput(attrs={"placeholder": "Enter task name"})
     )
@@ -85,10 +76,8 @@ class TaskCreationForm(forms.ModelForm):
 
     priority = forms.ChoiceField(
         required=True,
-        choices=PRIORITY_CHOICES,
-        widget=forms.Select(
-            attrs={"class": "form-select"},
-        ),
+        choices=Task.Priority.choices,
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     task_type = forms.ModelChoiceField(
