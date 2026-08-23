@@ -10,9 +10,7 @@ class PublicPositionTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_position_detail(self):
-        response = self.client.get(
-            reverse("planner:position-detail", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:position-detail", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_position_create(self):
@@ -20,15 +18,11 @@ class PublicPositionTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_position_update(self):
-        response = self.client.get(
-            reverse("planner:position-update", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:position-update", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
     def test_login_required_position_delete(self):
-        response = self.client.get(
-            reverse("planner:position-delete", kwargs={"pk": 1})
-        )
+        response = self.client.get(reverse("planner:position-delete", kwargs={"pk": 1}))
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -52,9 +46,7 @@ class PrivatePositionTest(TestCase):
         self.client.force_login(self.worker)
 
     def test_position_list(self):
-        response = self.client.get(
-            f"{reverse("planner:position-list")}?page=2"
-        )
+        response = self.client.get(f"{reverse("planner:position-list")}?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["position_list"]), 1)
 
@@ -87,10 +79,7 @@ class PrivatePositionTest(TestCase):
         data = {
             "name": "new_position",
         }
-        response = self.client.post(
-            reverse("planner:position-create"),
-            data=data
-        )
+        response = self.client.post(reverse("planner:position-create"), data=data)
         new_position = Position.objects.get(name=data["name"])
         self.assertEqual(new_position.name, data["name"])
         self.assertRedirects(response, reverse("planner:position-list"))
@@ -107,10 +96,7 @@ class PrivatePositionTest(TestCase):
             "name": "updated_name",
         }
         response = self.client.post(
-            reverse(
-                "planner:position-update",
-                kwargs={"pk": self.position.id}
-            ),
+            reverse("planner:position-update", kwargs={"pk": self.position.id}),
             data=data,
         )
         updated_position = Position.objects.get(id=self.position.id)
