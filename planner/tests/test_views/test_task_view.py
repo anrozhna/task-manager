@@ -53,7 +53,7 @@ class PrivateTaskTest(TestCase):
                 name=f"name_{task_id}",
                 description="test",
                 deadline="2024-05-10T12:00:00Z",
-                priority="high",
+                priority=Task.Priority.HIGH,
                 task_type=task_type,
             )
             task.assignees.set(assignees)
